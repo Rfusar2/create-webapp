@@ -1,5 +1,5 @@
-create-webapp
-create-webapp.exe
+create-app
+create-app.exe
 DEV/node_modules
 DEV/app/devfrontend.exe
 DEV/package-lock.json

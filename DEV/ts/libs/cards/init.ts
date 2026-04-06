@@ -1,5 +1,4 @@
-
-	enum ConfigCardStyle {
+enum ConfigCardStyle {
     PRIMARY,
     ERROR,
     SUCCESS

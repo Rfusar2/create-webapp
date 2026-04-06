@@ -1022,6 +1022,7 @@ type TableProps = {
     style: TableStyle;
     tools: SettingsTools;
     conn?: ()=>Promise<Data[]>;
+    ths: string[];
 }
 type ContentTableProps = {
     settings: SettingsTools;
@@ -1171,23 +1172,24 @@ class ContentTable {
         N_ROWS: "n_rows",
         SEARCH: "search",
     };
+    ths: string[];
     settings: SettingsTools;
     ready: Promise<void>;
 
-    constructor({settings, parent, width_columns, conn}: ContentTableProps){
+    constructor({settings, parent, width_columns, conn, ths}: ContentTableProps){
         parent.append(this.obj)
         this.settings = settings;
         this.data = [];
         this.pages = [];
         this.page = [];
         this.conn = conn
+        this.ths = ths
 
         this.thead.setAttribute("label", "thead");
         this.tbody.setAttribute("label", "tbody");
         this.obj.append(this.thead, this.tbody);
 
         this.init(parent, width_columns)
-        
     }
 
     async init(parent, width_columns) {
@@ -1202,8 +1204,10 @@ class ContentTable {
         //*nel caso non sia settata la lunghezza delle colonne
         let style = ".row, .table-titles { grid-template-columns: " 
         const addStyle = new TAG_HTML("style").obj
+
         if(!width_columns){ 
-            const n_columns = Object.keys(this.data[0]).length;
+            //const n_columns = Object.keys(this.data[0]).length;
+            const n_columns = Object.keys(this.ths).length;
             const width_table = parent.getBoundingClientRect().width;
             const width_column = Math.floor(width_table / n_columns)-2;
             style+=`+"`repeat(${n_columns}, ${width_column}px) }`"+`
@@ -1216,7 +1220,8 @@ class ContentTable {
     async toScreenNameColumns(){
         await this.getDBData()
         let riga = new TAG_HTML("div").class(["table-titles"]).obj;
-        for(const th_text of Object.keys(this.data[0])){
+        //for(const th_text of Object.keys(this.data[0])){
+        for(const th_text of this.ths){
             const container_th = new TAG_HTML("div")
                 .class(["container-th"])
                 .attr({colorschema: "dark"}).obj;
@@ -1316,15 +1321,16 @@ class ContentTable {
     async getDBData(){ 
         if(this.conn) { 
             const data = await this.conn();
-            this.data = data
+            //*Filtro e i dati con le colonne scelte
+            this.data = data.map((e: object) => {
+                const filteredEntries = Object.entries(e)
+                    .filter(([key]) => this.ths.includes(key))
+                    .sort(([a], [b]) => this.ths.indexOf(a) - this.ths.indexOf(b));
+                return Object.fromEntries(filteredEntries);
+            });
             return
         }
-        this.data = EXAMPLE_DATA.customers().customers
-        //switch(this.dbName){
-        //    case "full": this.data = EXAMPLE_DATA.full(); break;
-        //    case "expired": this.data = EXAMPLE_DATA.expired(); break;
-        //    default: this.data = EXAMPLE_DATA.full();break;
-        //}
+        //this.data = EXAMPLE_DATA.customers().customers
     }
 
     async update(doQuery:boolean){ if(doQuery){ await this.getDBData(); } }
@@ -1359,7 +1365,8 @@ class Table {
     table:  ContentTable;
     footer = new FooterTable(0, 0);
 
-    constructor({e, parent, title, dimension, style, tools, conn}:TableProps){
+
+    constructor({e, parent, title, dimension, style, tools, conn, ths}:TableProps){
         parent.append(e)
         this.obj = e;
         this.obj.setAttribute("data-colorschema", "dark")
@@ -1371,6 +1378,7 @@ class Table {
             settings: tools, 
             parent: this.obj,
             conn: conn,
+            ths: ths
         });
 
     }
@@ -1791,101 +1799,24 @@ class Routes {
 
         //*QUERY DB
         await this.db.ready;
+
         
-
-        //*DATA CARDS
-        const cards = [
-            {
-                title: "Materiali disponibili", 
-                content: String(10), 
-                note: "2026-2027",
-            },
-            {
-                title: "Prodotti", 
-                content: String(12), 
-                note: "2026-2027",
-            },
-            {
-                title: "Ordini", 
-                content: String(20), 
-                note: "2026-2027",
-            },
-            {
-                title: "Clienti", 
-                content: String(5), 
-                router: "clienti",
-            },
-        ];
-
-        //TOSCREEN
-        for(let i = 0; i < cards.length; i++){
-            const card = cards[i];
-            new Card({
-                parent: s1,
-                title: card.title,
-                style: ConfigCardStyle.PRIMARY,
-                content: card.content,
-                view: true,
-                note: card.note,
-                router: card.router,
-            })
-        }
-    }
-
-    //*TABLES
-    clienti(){
-        this.init("page-customer");
         new Table({
             e: new TAG_HTML("table").class(["table"]).obj,
-            parent: this.main,
+            parent: s2,
             title: "I miei clienti",
-            dimension: "large",
+            dimension: "small",
             style: "simple",
             tools: {n_rows:false, n_pag:false, search:false, settings:false},
 			conn: async()=>{
 				let res = await fetch("/db/customers/get", {method:"GET"})
 				return await res.json()
-			}
+			},
+            ths: ["name", "surname", "id"],
         })
-    }
-    materiali(){
-        this.init("page-materials");
-        new Table({
-            e: new TAG_HTML("table").class(["table"]).obj,
-            parent: this.main,
-            title: "I miei materiali",
-            dimension: "large",
-            style: "simple",
-            tools: {n_rows:false, n_pag:false, search:false, settings:false},
-        })
-    }
-    ordini(){
-        this.init("page-orders");
-        new Table({
-            e: new TAG_HTML("table").class(["table"]).obj,
-            parent: this.main,
-            title: "I miei ordini",
-            dimension: "large",
-            style: "simple",
-            tools: {n_rows:false, n_pag:false, search:false, settings:false},
-        })
-    }
-    prodotti(){
-        this.init("page-products");
-        new Table({
-            e: new TAG_HTML("table").class(["table"]).obj,
-            parent: this.main,
-            title: "I mio Listino",
-            dimension: "large",
-            style: "simple",
-            tools: {n_rows:false, n_pag:false, search:false, settings:false},
-        })
-    }   
+        
 
-    //UPGRADE v0.0.2
-    progetti(){
-        this.init("page-projects");
-    }   
+    }
 }`
 	FRONTEND_UTILS_TS = `
 	class TAG_HTML {
@@ -1974,22 +1905,8 @@ class GENERATE {
 }
 
 //from api
-type Data = ItemCustomer[] | ItemOrder[] | ItemStoreHouseMaterial[] | ItemStoreHouseProduct[] ;
-
-class EXAMPLE_DATA {
-    static customer():Data{
-        const data:ItemCustomer[] = [];
-        for (let i = 0; i < 500; i++) {
-            data.push({
-                id: i + 1,
-                name:    GENERATE.get(["prov1", "prova2"]),
-                surname: GENERATE.get(["a", "b"]),
-                address: GENERATE.get(["c", "d"])
-            });
-        }
-        return {customers: data};
-    }
-}`
+type Data = ItemCustomer[] | ItemOrder[] | ItemStoreHouseMaterial[] | ItemStoreHouseProduct[];
+`
     FRONTEND_APP_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 

@@ -90,7 +90,7 @@ class FooterTable {
     }
 }
 class ContentTable {
-    constructor({ settings, parent, width_columns, conn }) {
+    constructor({ settings, parent, width_columns, conn, ths }) {
         this.obj = new TAG_HTML("main").class(["container-table-content"]).obj;
         this.n_pag = 0;
         this.n_rows = 10;
@@ -109,6 +109,7 @@ class ContentTable {
         this.pages = [];
         this.page = [];
         this.conn = conn;
+        this.ths = ths;
         this.thead.setAttribute("label", "thead");
         this.tbody.setAttribute("label", "tbody");
         this.obj.append(this.thead, this.tbody);
@@ -125,7 +126,8 @@ class ContentTable {
         let style = ".row, .table-titles { grid-template-columns: ";
         const addStyle = new TAG_HTML("style").obj;
         if (!width_columns) {
-            const n_columns = Object.keys(this.data[0]).length;
+            //const n_columns = Object.keys(this.data[0]).length;
+            const n_columns = Object.keys(this.ths).length;
             const width_table = parent.getBoundingClientRect().width;
             const width_column = Math.floor(width_table / n_columns) - 2;
             style += `repeat(${n_columns}, ${width_column}px) }`;
@@ -139,7 +141,8 @@ class ContentTable {
     async toScreenNameColumns() {
         await this.getDBData();
         let riga = new TAG_HTML("div").class(["table-titles"]).obj;
-        for (const th_text of Object.keys(this.data[0])) {
+        //for(const th_text of Object.keys(this.data[0])){
+        for (const th_text of this.ths) {
             const container_th = new TAG_HTML("div")
                 .class(["container-th"])
                 .attr({ colorschema: "dark" }).obj;
@@ -240,15 +243,16 @@ class ContentTable {
     async getDBData() {
         if (this.conn) {
             const data = await this.conn();
-            this.data = data;
+            //*Filtro e i dati con le colonne scelte
+            this.data = data.map((e) => {
+                const filteredEntries = Object.entries(e)
+                    .filter(([key]) => this.ths.includes(key))
+                    .sort(([a], [b]) => this.ths.indexOf(a) - this.ths.indexOf(b));
+                return Object.fromEntries(filteredEntries);
+            });
             return;
         }
-        this.data = EXAMPLE_DATA.customers().customers;
-        //switch(this.dbName){
-        //    case "full": this.data = EXAMPLE_DATA.full(); break;
-        //    case "expired": this.data = EXAMPLE_DATA.expired(); break;
-        //    default: this.data = EXAMPLE_DATA.full();break;
-        //}
+        //this.data = EXAMPLE_DATA.customers().customers
     }
     async update(doQuery) { if (doQuery) {
         await this.getDBData();
@@ -271,7 +275,7 @@ class ContentTable {
     }
 }
 class Table {
-    constructor({ e, parent, title, dimension, style, tools, conn }) {
+    constructor({ e, parent, title, dimension, style, tools, conn, ths }) {
         this.settings = new SettingsTable();
         this.isDark = true; //da togliere
         this.footer = new FooterTable(0, 0);
@@ -285,6 +289,7 @@ class Table {
             settings: tools,
             parent: this.obj,
             conn: conn,
+            ths: ths
         });
     }
     async loadContent({ style, tools, conn }) {

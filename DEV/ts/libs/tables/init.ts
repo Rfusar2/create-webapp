@@ -1,4 +1,3 @@
-
 type SettingsTools = {
     n_pag: boolean;
     n_rows: boolean;
@@ -16,6 +15,7 @@ type TableProps = {
     style: TableStyle;
     tools: SettingsTools;
     conn?: ()=>Promise<Data[]>;
+    ths: string[];
 }
 type ContentTableProps = {
     settings: SettingsTools;
@@ -165,23 +165,24 @@ class ContentTable {
         N_ROWS: "n_rows",
         SEARCH: "search",
     };
+    ths: string[];
     settings: SettingsTools;
     ready: Promise<void>;
 
-    constructor({settings, parent, width_columns, conn}: ContentTableProps){
+    constructor({settings, parent, width_columns, conn, ths}: ContentTableProps){
         parent.append(this.obj)
         this.settings = settings;
         this.data = [];
         this.pages = [];
         this.page = [];
         this.conn = conn
+        this.ths = ths
 
         this.thead.setAttribute("label", "thead");
         this.tbody.setAttribute("label", "tbody");
         this.obj.append(this.thead, this.tbody);
 
         this.init(parent, width_columns)
-        
     }
 
     async init(parent, width_columns) {
@@ -196,8 +197,10 @@ class ContentTable {
         //*nel caso non sia settata la lunghezza delle colonne
         let style = ".row, .table-titles { grid-template-columns: " 
         const addStyle = new TAG_HTML("style").obj
+
         if(!width_columns){ 
-            const n_columns = Object.keys(this.data[0]).length;
+            //const n_columns = Object.keys(this.data[0]).length;
+            const n_columns = Object.keys(this.ths).length;
             const width_table = parent.getBoundingClientRect().width;
             const width_column = Math.floor(width_table / n_columns)-2;
             style+=`repeat(${n_columns}, ${width_column}px) }`
@@ -210,7 +213,8 @@ class ContentTable {
     async toScreenNameColumns(){
         await this.getDBData()
         let riga = new TAG_HTML("div").class(["table-titles"]).obj;
-        for(const th_text of Object.keys(this.data[0])){
+        //for(const th_text of Object.keys(this.data[0])){
+        for(const th_text of this.ths){
             const container_th = new TAG_HTML("div")
                 .class(["container-th"])
                 .attr({colorschema: "dark"}).obj;
@@ -310,15 +314,16 @@ class ContentTable {
     async getDBData(){ 
         if(this.conn) { 
             const data = await this.conn();
-            this.data = data
+            //*Filtro e i dati con le colonne scelte
+            this.data = data.map((e: object) => {
+                const filteredEntries = Object.entries(e)
+                    .filter(([key]) => this.ths.includes(key))
+                    .sort(([a], [b]) => this.ths.indexOf(a) - this.ths.indexOf(b));
+                return Object.fromEntries(filteredEntries);
+            });
             return
         }
-        this.data = EXAMPLE_DATA.customers().customers
-        //switch(this.dbName){
-        //    case "full": this.data = EXAMPLE_DATA.full(); break;
-        //    case "expired": this.data = EXAMPLE_DATA.expired(); break;
-        //    default: this.data = EXAMPLE_DATA.full();break;
-        //}
+        //this.data = EXAMPLE_DATA.customers().customers
     }
 
     async update(doQuery:boolean){ if(doQuery){ await this.getDBData(); } }
@@ -353,7 +358,8 @@ class Table {
     table:  ContentTable;
     footer = new FooterTable(0, 0);
 
-    constructor({e, parent, title, dimension, style, tools, conn}:TableProps){
+
+    constructor({e, parent, title, dimension, style, tools, conn, ths}:TableProps){
         parent.append(e)
         this.obj = e;
         this.obj.setAttribute("data-colorschema", "dark")
@@ -365,6 +371,7 @@ class Table {
             settings: tools, 
             parent: this.obj,
             conn: conn,
+            ths: ths
         });
 
     }
