@@ -1004,7 +1004,7 @@ class Popup {
     border-left: 3px solid green;
 }`
 
-	FRONTEND_TABLE_TS = `
+	FRONTEND_TABLES_TS = `
 type SettingsTools = {
     n_pag: boolean;
     n_rows: boolean;
@@ -1465,7 +1465,7 @@ class Table {
 
     }
 }`
-	FRONTEND_TABLE_CSS = `
+	FRONTEND_TABLES_CSS = `
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -2443,14 +2443,12 @@ body {
   "scripts": {
     "build-css": "postcss style.css -o ./full.min.css",
     "build-js": "esbuild index.js --minify --outfile=./full.min.js",
-    "dev": "live-server . --port=3000 --open=./index.html",
     "start": "tsc --watch",
     "compile": "tsc"
   },
   "devDependencies": {
     "cssnano": "^6.0.0",
     "esbuild": "^0.27.4",
-    "live-server": "^1.2.2",
     "postcss-cli": "^10.1.0",
     "typescript": "^6.0.2"
   }
@@ -2458,7 +2456,7 @@ body {
 	TSCONFIG = `
 {
   "compilerOptions": {
-    "outDir": "./static/js",
+    "outDir": "./app/static/js",
     "rootDir": "./ts",
     "module": "commonjs",
     "target": "es2021",

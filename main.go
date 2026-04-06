@@ -17,6 +17,7 @@ func main() {
 		"chart":  FRONTEND_CHART_TS,
 		"models": FRONTEND_MODELS_TS,
 		"nav":    FRONTEND_NAV_TS,
+		"tables": FRONTEND_TABLES_TS,
 		"popup":  FRONTEND_POPUP_TS,
 	}
 	FRONTEND_CSS := map[string]string{
@@ -25,6 +26,7 @@ func main() {
 		"chart":  FRONTEND_CHART_CSS,
 		"models": FRONTEND_MODELS_CSS,
 		"nav":    FRONTEND_NAV_CSS,
+		"tables": FRONTEND_TABLES_CSS,
 		"popup":  FRONTEND_POPUP_CSS,
 	}
 
@@ -46,35 +48,32 @@ func main() {
 
 	if(backend == "" || project == "") {log.Println("Devi specificare --project=??? e --backend=???"); os.Exit(1)}
 
-	log.Println("NOME PROGETTO: "+project)
-	log.Println("TIPOLOGIA: "+backend)
+	log.Println("NOME PROGETTO: '"+project+"'")
+	log.Println("TIPOLOGIA: '"+backend+"'")
+
+	createTS(FRONTEND_TS)
+	createCSS(FRONTEND_CSS)
+	createFileCSS("home", FRONTEND_HOME_CSS)
+	createFileCSS("app", FRONTEND_APP_CSS)
+	createFileTS("dbConnection", FRONTEND_DBCONNECTION_TS)
+	createFileTS("routes", FRONTEND_ROUTES_TS)
+	createFileTS("utils", FRONTEND_UTILS_TS)
+	createFile("package.json", PACKAGEJSON)
+	createFile("tsconfig.json", TSCONFIG)
+	createFile(filepath.Join("app", "index.html"), HTML_PAGE)
+
 
 	if backend != "" {
 		if backend == "golang" {
-			createFile("server.go", BACKEND_GOLANG_MAIN)
-			createFile("routes.go", BACKEND_GOLANG_ROUTES)
-			createFile("utils.go",  BACKEND_GOLANG_UTILS)
+			createFile(filepath.Join("app", "server.go"), BACKEND_GOLANG_MAIN)
+			createFile(filepath.Join("app", "routes.go"), BACKEND_GOLANG_ROUTES)
+			createFile(filepath.Join("app", "utils.go"),  BACKEND_GOLANG_UTILS)
 
 		} else if backend == "online" {
 			//...
 
 		}
 	}
-
-	createTS(FRONTEND_TS)
-	createCSS(FRONTEND_CSS)
-
-	createFileCSS("home", FRONTEND_HOME_CSS)
-	createFileCSS("app", FRONTEND_APP_CSS)
-
-	createFileTS("dbConnection", FRONTEND_DBCONNECTION_TS)
-	createFileTS("routes", FRONTEND_ROUTES_TS)
-	createFileTS("utils", FRONTEND_UTILS_TS)
-	
-	createFile("package.json", PACKAGEJSON)
-	createFile("tsconfig.json", TSCONFIG)
-	
-	createFile(filepath.Join("app", "index.html"), HTML_PAGE)
 }
 
 
