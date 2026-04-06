@@ -16,5 +16,16 @@ class Routes {
         s1.id = "home-section1";
         //*QUERY DB
         await this.db.ready;
+        new Model({
+            conn: async () => { },
+            type: ConfigModelTypes.RIGHT,
+            title: "ualala",
+            inputs: [
+                new MyInput({
+                    props: { placeholder: "ok" },
+                    regex: /[a-z]{5}[0-9]{3}/,
+                }),
+            ]
+        });
     }
 }

@@ -19,6 +19,7 @@ func main() {
 		"nav":    FRONTEND_NAV_TS,
 		"tables": FRONTEND_TABLES_TS,
 		"popup":  FRONTEND_POPUP_TS,
+		"input":  FRONTEND_INPUT_TS,
 	}
 	FRONTEND_CSS := map[string]string{
 		"aside":  FRONTEND_ASIDE_CSS,

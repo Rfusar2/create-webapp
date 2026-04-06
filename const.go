@@ -2,6 +2,53 @@ package main
 
 //*FRONTEND
 const (
+	FRONTEND_INPUT_TS = `
+type ConfigInputEvent = {
+    type: string;
+    func: ()=>void;
+}
+type ConfigInputProps = {
+    props: object;
+    tag?: string;
+    options?: HTMLOptionElement[];
+    label?: string;
+    event?: ConfigModelInputEvent;
+    regex?: RagExp;
+}
+
+class MyInput {
+    obj: HTMLElement;
+    input: HTMLInputElement;
+
+    constructor({props, tag, options, label, event, regex}:ConfigModelInputProps){
+        this.obj = new TAG_HTML(tag ? tag : "input").props(props).obj
+        this.input = this.obj
+        this.regex = regex
+        switch(tag){
+            case "select": 
+                if(options) {console.log(this.obj, label, options); this.obj.append(...options);} break; 
+        }
+        
+        if(event){ this.obj.addEventListener(event.type, event.func) }
+
+        if(label){
+            const input = this.obj;
+            this.input = input
+            const container = new TAG_HTML("div").class(["model-input-select"]).obj
+            const name_input = new TAG_HTML("label").props({textContent: label}).obj
+            container.append(name_input, input)
+            this.obj = container
+        }
+        if(regex){
+            this.input.addEventListener("blur", ()=>{
+                const correct = regex.test(this.input.value);
+                const color = correct ? SELECT.style("--light-blue") : "red";
+                this.input.style.borderBottom = "1px solid "+color;
+            })
+        }
+    }
+}`
+
 	FRONTEND_ASIDE_TS = `
 type RouteName = "project"
 
@@ -463,58 +510,19 @@ enum ConfigModelTypes {
     CENTER,
     RIGHT
 }
-type ConfigModelInputEvent = {
-    type: string;
-    func: ()=>void;
-}
-type ConfigModelInputProps = {
-    props: object;
-    tag?: string;
-    options?: HTMLOptionElement[];
-    label?: string;
-    event?: ConfigModelInputEvent;
-}
-
-class ConfigModelInput {
-    obj: HTMLElement;
-    status = false;
-    input: HTMLInputElement;
-    event: ConfigModelInputEvent | undefined;
-
-    constructor({props, tag, options, label, event}:ConfigModelInputProps){
-        this.obj = new TAG_HTML(tag ? tag : "input").props(props).obj
-        this.input = this.obj
-        switch(tag){
-            case "select": 
-                if(options) {console.log(this.obj, label, options); this.obj.append(...options);} break; 
-        }
-        
-        if(event){ this.obj.addEventListener(event.type, event.func) }
-
-        if(label){
-            const input = this.obj;
-            this.input = input
-            const container = new TAG_HTML("div").class(["model-input-select"]).obj
-            const name_input = new TAG_HTML("label").props({textContent: label}).obj
-            container.append(name_input, input)
-            this.obj = container
-        }
-    }
-}
-
 
 type ConfigModelProps = {
     conn: (data:object)=>Promise<void>;
     type: ConfigModelTypes;
     title: string;
-    inputs: ConfigModelInput[];
+    inputs: MyInput[];
 }
 
 class ConfigModel {
     conn: (data:object)=>Promise<void>;
     type: ConfigModelTypes;
     title: string;
-    inputs: ConfigModelInput[];
+    inputs: MyInput[];
     constructor({conn, type, title, inputs}: ConfigModelProps){
         this.conn = conn
         this.type = type
@@ -1725,33 +1733,6 @@ type ItemCustomer = {
     surname: string;
     address: string;
 }
-type ItemOrderDetails = {
-    quantity: number;
-    product: number;
-    description: string;
-}
-type ItemOrder = {
-    id: number;
-    name: string;
-    customer: number;
-    details: ItemOrderDetails;
-}
-type ItemStoreHouseMaterial = {
-    id: number;
-    name: string;
-    free: number;
-    blocked: number;
-}
-type ItemStoreHouseProduct = {
-    id: number;
-    name: string;
-    status: string;
-    materials: ItemStoreHouseMaterial;
-}
-type StoreHouse = {
-    materials: ItemStoreHouseMaterial[];
-    products: ItemStoreHouseProduct[];
-}
 
 class HandlerConnection {}
 
@@ -1767,14 +1748,14 @@ class MyDB {
 
     async init(){
         await Promise.all([
-            //await this.load({name: "storehouse"}),
+            await this.load({name: "customers"}),
         ])
     }
 
     async load(query: DBQuery){
-        //let res = await fetch(`+"`/db/${query.name}/get`"+`, {method:"GET"})
-        //res = await res.json();
-        //this.tables[query.name] = res;
+        let res = await fetch(`+"`/db/${query.name}/get`"+`, {method:"GET"})
+        res = await res.json();
+        this.tables[query.name] = res;
     }
 
 }
@@ -1905,8 +1886,7 @@ class GENERATE {
 }
 
 //from api
-type Data = ItemCustomer[] | ItemOrder[] | ItemStoreHouseMaterial[] | ItemStoreHouseProduct[];
-`
+type Data = ItemCustomer[]`
     FRONTEND_APP_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -2224,6 +2204,7 @@ const HTML_PAGE  = `
     <!--libs-->
     <script src="static/js/libs/dbConnection.js" ></script>
     <script src="static/js/libs/utils.js" ></script>
+    <script src="static/js/libs/input/init.js" ></script>
     <script src="static/js/libs/chart/init.js" ></script>
     <script src="static/js/libs/nav/init.js" ></script>
     <script src="static/js/libs/routes.js" ></script>

@@ -1,7 +1,12 @@
 type ConfigCardDetailsInputProps = {
     label: string;
     tag: string;
+    event: {
+        type: string;
+        func: ()=>void;
+    }
 }
+
 
 type ConfigCardDetailsSection = {
     title: string;
@@ -29,7 +34,7 @@ class CardDetails {
         const h1 = new TAG_HTML("h1").props({textContent: title})
         h_box1.append(h1)
 
-
+        
 
 
     }

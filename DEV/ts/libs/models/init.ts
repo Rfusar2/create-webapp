@@ -1,60 +1,20 @@
-
 enum ConfigModelTypes {
     CENTER,
     RIGHT
 }
-type ConfigModelInputEvent = {
-    type: string;
-    func: ()=>void;
-}
-type ConfigModelInputProps = {
-    props: object;
-    tag?: string;
-    options?: HTMLOptionElement[];
-    label?: string;
-    event?: ConfigModelInputEvent;
-}
-
-class ConfigModelInput {
-    obj: HTMLElement;
-    status = false;
-    input: HTMLInputElement;
-    event: ConfigModelInputEvent | undefined;
-
-    constructor({props, tag, options, label, event}:ConfigModelInputProps){
-        this.obj = new TAG_HTML(tag ? tag : "input").props(props).obj
-        this.input = this.obj
-        switch(tag){
-            case "select": 
-                if(options) {console.log(this.obj, label, options); this.obj.append(...options);} break; 
-        }
-        
-        if(event){ this.obj.addEventListener(event.type, event.func) }
-
-        if(label){
-            const input = this.obj;
-            this.input = input
-            const container = new TAG_HTML("div").class(["model-input-select"]).obj
-            const name_input = new TAG_HTML("label").props({textContent: label}).obj
-            container.append(name_input, input)
-            this.obj = container
-        }
-    }
-}
-
 
 type ConfigModelProps = {
     conn: (data:object)=>Promise<void>;
     type: ConfigModelTypes;
     title: string;
-    inputs: ConfigModelInput[];
+    inputs: MyInput[];
 }
 
 class ConfigModel {
     conn: (data:object)=>Promise<void>;
     type: ConfigModelTypes;
     title: string;
-    inputs: ConfigModelInput[];
+    inputs: MyInput[];
     constructor({conn, type, title, inputs}: ConfigModelProps){
         this.conn = conn
         this.type = type
