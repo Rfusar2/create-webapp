@@ -1208,7 +1208,7 @@ class ContentTable {
             const width_column = Math.floor(width_table / n_columns)-2;
             style+=`+"`repeat(${n_columns}, ${width_column}px) }`"+`
         }
-        else { style+=`+"`${width_columns} }`"+` }
+        else { style+=`+"`${width_columns} }`"+`}
         addStyle.textContent = style;
         SELECT.one("head").append(addStyle)
     }
@@ -1316,9 +1316,10 @@ class ContentTable {
     async getDBData(){ 
         if(this.conn) { 
             const data = await this.conn();
-            console.log(data)
             this.data = data
+            return
         }
+        this.data = EXAMPLE_DATA.customers().customers
         //switch(this.dbName){
         //    case "full": this.data = EXAMPLE_DATA.full(); break;
         //    case "expired": this.data = EXAMPLE_DATA.expired(); break;
@@ -1362,7 +1363,7 @@ class Table {
         parent.append(e)
         this.obj = e;
         this.obj.setAttribute("data-colorschema", "dark")
-        this.obj.classList.add(`+"`table-${dimension}`"+`);
+        this.obj.classList.add(`+"`table-${dimension}`)"+`;
         this.settings.tools = tools;
         
         this.header = new HeaderTable(this.settings.tools, title,this.obj);
@@ -1749,9 +1750,6 @@ class HandlerConnection {}
 class MyDB {
     handler = new HandlerConnection();
     tables = {
-        storehouse: [],
-        orders: [],
-        customers: [],
     };
     ready: Promise<void>;
 
@@ -1761,16 +1759,14 @@ class MyDB {
 
     async init(){
         await Promise.all([
-            await this.load({name: "storehouse"}),
-            await this.load({name: "orders"}),
-            await this.load({name: "customers"}),
+            //await this.load({name: "storehouse"}),
         ])
     }
 
     async load(query: DBQuery){
-        let res = await fetch(`+"`/db/${query.name}/get`"+`, {method:"GET"})
-        res = await res.json();
-        this.tables[query.name] = res;
+        //let res = await fetch(`+"`/db/${query.name}/get`"+`, {method:"GET"})
+        //res = await res.json();
+        //this.tables[query.name] = res;
     }
 
 }
@@ -1795,279 +1791,29 @@ class Routes {
 
         //*QUERY DB
         await this.db.ready;
-        const storehouse = this.db.tables.storehouse as StoreHouse;
-        const materials = storehouse.materials as ItemStoreHouseMaterial[];
-        const products = storehouse.products as ItemStoreHouseProduct[];
-
-        const customers = this.db.tables.customers as ItemCustomer[];
-        const orders = this.db.tables.orders as ItemOrder[];
-    
-        //* Filters
-        const options_customers = customers
-            .map((e:ItemCustomer)=>new Option(e.name, String(e.id)));
-        
-        const options_products = products
-            .map((e:ItemStoreHouseProduct)=>new Option(e.name, String(e.id)));
-
-        const options_materials1 = materials
-            .map((e: ItemStoreHouseMaterial) => new Option(e.name, String(e.id) ));
-
-        const options_materials2 = materials
-            .map((e: ItemStoreHouseMaterial) => new Option(e.name, String(e.id) ));
-
-        let n_materials = 0
-        materials.forEach((e:ItemStoreHouseMaterial)=>n_materials+=e.free)
         
 
         //*DATA CARDS
         const cards = [
             {
                 title: "Materiali disponibili", 
-                content: String(n_materials), 
-                router: "materiali",
-                form: {
-                    conn: async (data)=>{
-                        const isNew = data[1].value!="";
-                        const body = {
-                            id: isNew ? -1 : Number(data[0].value),
-                            name: isNew ? data[1].value : data[0].selectedOptions[0].text,
-                            free: Number(data[2].value),
-                            blocked: 0,
-                        }
-                        //console.log("OBJECT", body)
-
-                        let res = await fetch("/db/storehouse/materials/add", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(body)
-                        })
-
-                        if(res.status == 200){
-                            new Popup({type:"right", text: "Materiale Aggiunto", status: ConfigPopupStatus.OK })
-                            console.log(await res.json())
-                        }
-                        else {
-                            new Popup({type:"right", text: "Materiale Non Aggiunto", status: ConfigPopupStatus.KO })
-                            console.log("Materiale Aggiunto: "+await res.text())
-                        }
-                    },
-                    title: "Aggiungi item",
-                    model: ConfigModelTypes.CENTER,
-                    inputs:[
-                        new ConfigModelInput({
-                            tag: "select",
-                            options: options_materials2,
-                            label: "materiale",
-                            props: {
-                                placeholder:"Matriali...",
-                                name:"materials",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Nuovo Materiale ?",
-                                name:"new-material",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Quantita",
-                                name:"free",
-                                type: "number",
-                            }
-                        }),
-                    ]
-                }
+                content: String(10), 
+                note: "2026-2027",
             },
             {
                 title: "Prodotti", 
-                content: String(options_products.length), 
-                router: "prodotti",
-                form: {
-                    conn: async (data)=>{
-                        const body = {
-                            name: data[0].value,
-                            materials: data[2].value.split(";").map((e:string)=>Number(e)),
-                        }
-                        console.log(body)
-
-                        //let res = await fetch("/db/storehouse/products/add", {
-                        //    method: "POST",
-                        //    headers: { "Content-Type": "application/json" },
-                        //    body: JSON.stringify(body)
-                        //})
-
-                        //if(res.status == 200){
-                        //    new Popup({type:"right", text: "Prodotto Aggiunto", status: ConfigPopupStatus.OK })
-                        //    console.log(await res.json())
-                        //}
-                        //else {
-                        //    new Popup({type:"right", text: "Prodotto Non Aggiunto", status: ConfigPopupStatus.KO })
-                        //    console.log("Prodotto Non Aggiunto: "+await res.text())
-                        //}
-                    },
-                    title: "Aggiungi prodotto",
-                    model: ConfigModelTypes.CENTER,
-                    inputs:[
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Nome prodotto", 
-                                name:"name",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            tag: "select",
-                            options: options_materials1,
-                            label: "materiale",
-                            event: {
-                                type: "change",
-                                func: (e)=>{
-                                    const input = e.currentTarget;
-                                    const list_materials = SELECT.one("#list-materials");
-                                    list_materials.value += input.value+";"
-                                },
-                                
-                            },
-                            props: {
-                                placeholder:"Matriali...",
-                                name:"materials",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Matriali...",
-                                name:"materials",
-                                id: "list-materials"
-                            }
-                        }),
-                    ]
-                }
+                content: String(12), 
+                note: "2026-2027",
             },
             {
                 title: "Ordini", 
-                content: String(orders.length), 
-                router: "ordini",
-                form: {
-                    //TODO da finire
-                    conn: async (data)=>{
-                        const isNew = data[1].value!="";
-                        const body = {
-                        }
-                        console.log(data)
-
-                        //let res = await fetch("/db/orders/add", {
-                        //    method: "POST",
-                        //    headers: { "Content-Type": "application/json" },
-                        //    body: JSON.stringify(body)
-                        //})
-
-                        //if(res.status == 200){
-                        //    new Popup({type:"right", text: "Materiale Aggiunto", status: ConfigPopupStatus.OK })
-                        //    console.log(await res.json())
-                        //}
-                        //else {
-                        //    new Popup({type:"right", text: "Materiale Non Aggiunto", status: ConfigPopupStatus.KO })
-                        //    console.log("Materiale Aggiunto: "+await res.text())
-                        //}
-                    },
-                    title: "Aggiungi ordine",
-                    model: ConfigModelTypes.CENTER,
-                    inputs:[
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Nome Ordine", 
-                                name:"name",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            label:"Cliente",
-                            tag: "select",
-                            options: options_customers,
-                            props: {
-                                name:"customer",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            label:"Prodotto",
-                            tag: "select",
-                            options: options_products,
-                            props: {
-                                name:"material",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Quantita",
-                                name:"quantity",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            label:"Status",
-                            tag: "select",
-                            options: [new Option("Attesa", "0"), new Option("Working", "1")],
-                            props: {
-                                name:"description",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Descrizione",
-                                name:"description",
-                            }
-                        }),
-                    ]
-                }
+                content: String(20), 
+                note: "2026-2027",
             },
             {
                 title: "Clienti", 
-                content: String(customers.length), 
+                content: String(5), 
                 router: "clienti",
-                form: {
-                    conn: async (data)=>{
-                        const body = {
-                            name: data[0].value,
-                            surname: data[1].value,
-                            address: data[2].value,
-                        }
-
-                        let res = await fetch("/db/customers/add", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify(body)
-                        })
-
-                        if(res.status == 200){
-                            new Popup({type:"right", text: "Cliente Aggiunto", status: ConfigPopupStatus.OK })
-                            console.log(await res.json())
-                        }
-                        else {
-                            new Popup({type:"right", text: "Cliente Non Aggiunto", status: ConfigPopupStatus.KO })
-                            console.log("Materiale Non Aggiunto: "+await res.text())
-                        }
-                    },
-                    title: "Aggiungi cliente",
-                    model: ConfigModelTypes.CENTER,
-                    inputs:[
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Nome Cliente", 
-                                name:"name",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Cognome Cliente", 
-                                name:"surname",
-                            }
-                        }),
-                        new ConfigModelInput({
-                            props: {
-                                placeholder:"Indirizzo Cliente",
-                                name:"address",
-                            }
-                        }),
-                    ]
-                }
             },
         ];
 
@@ -2080,9 +1826,8 @@ class Routes {
                 style: ConfigCardStyle.PRIMARY,
                 content: card.content,
                 view: true,
-                form: card.form,
+                note: card.note,
                 router: card.router,
-
             })
         }
     }
@@ -2097,19 +1842,10 @@ class Routes {
             dimension: "large",
             style: "simple",
             tools: {n_rows:false, n_pag:false, search:false, settings:false},
-            conn: async ()=>{
-                let res = await fetch("/db/customers/get", {
-                    method: "GET"
-                })
-                res = await res.json()
-                return res.map((e:ItemCustomer)=>{ 
-                    return {
-                        name: e.name, 
-                        surname: e.surname,
-                        address: e.address,
-                    } 
-                })
-            }
+			conn: async()=>{
+				let res = await fetch("/db/customers/get", {method:"GET"})
+				return await res.json()
+			}
         })
     }
     materiali(){
@@ -2121,20 +1857,6 @@ class Routes {
             dimension: "large",
             style: "simple",
             tools: {n_rows:false, n_pag:false, search:false, settings:false},
-            conn: async ()=>{
-                let res = await fetch("/db/storehouse/get", {
-                    method: "GET"
-                })
-                res = await res.json()
-                return res.materials.map((e:ItemStoreHouseMaterial)=>{ 
-                    return {
-                        id: String(e.id),
-                        name: e.name,
-                        free: String(e.free),
-                        blocked: String(e.blocked),
-                    } 
-                })
-            }
         })
     }
     ordini(){
@@ -2146,18 +1868,6 @@ class Routes {
             dimension: "large",
             style: "simple",
             tools: {n_rows:false, n_pag:false, search:false, settings:false},
-            conn: async ()=>{
-                let res = await fetch("/db/orders/get", {
-                    method: "GET"
-                })
-                res = await res.json()
-                return res.map((e:ItemCustomer)=>{ 
-                    return {
-                        name: e.name, 
-                        surname: e.surname
-                    } 
-                })
-            }
         })
     }
     prodotti(){
@@ -2169,18 +1879,6 @@ class Routes {
             dimension: "large",
             style: "simple",
             tools: {n_rows:false, n_pag:false, search:false, settings:false},
-            conn: async ()=>{
-                let res = await fetch("/db/storehouse/products/get", {
-                    method: "GET"
-                })
-                res = await res.json()
-                return res.products.map((e:ItemCustomer)=>{ 
-                    return {
-                        name: e.name, 
-                        surname: e.surname
-                    } 
-                })
-            }
         })
     }   
 
@@ -2277,38 +1975,21 @@ class GENERATE {
 
 //from api
 type Data = ItemCustomer[] | ItemOrder[] | ItemStoreHouseMaterial[] | ItemStoreHouseProduct[] ;
-//
-//class EXAMPLE_DATA {
-//    static customer():Data{
-//        const data:ItemCustomer[] = [];
-//        for (let i = 0; i < 500; i++) {
-//            data.push({
-//                id: i + 1,
-//                name:    GENERATE.get(["prov1", "prova2"]),
-//                surname: GENERATE.get(["a", "b"]),
-//                address: GENERATE.get(["c", "d"])
-//            });
-//        }
-//        return {customers: data};
-//    }
-//}
 
-
-//const handler_colorschema = SELECT.one("#data-colorschema")
-//const callback_mutation = (mutationList, observer)=>{
-//    for(const mutation of mutationList){
-//        //if(mutation.type === "attributes"){
-//        //    const isDark = handler_colorschema.getAttribute("colroschema") == "light";
-//        //    handler_colorschema.setAttribute("colorschema", isDark?"light":"dark");
-//        //    for(const e of SELECT.all("[data-colorschema]")){ e.dataset.colorschema = isDark?"dark":"light";}
-//
-//        //    console.log(isDark);
-//        //}
-//    }
-//}
-//const observer = new MutationObserver(callback_mutation);
-//observer.observe(handler_colorschema, {attributes:true})`
-
+class EXAMPLE_DATA {
+    static customer():Data{
+        const data:ItemCustomer[] = [];
+        for (let i = 0; i < 500; i++) {
+            data.push({
+                id: i + 1,
+                name:    GENERATE.get(["prov1", "prova2"]),
+                surname: GENERATE.get(["a", "b"]),
+                address: GENERATE.get(["c", "d"])
+            });
+        }
+        return {customers: data};
+    }
+}`
     FRONTEND_APP_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -2485,7 +2166,7 @@ var server = &http.Server{
 
 
 func main(){
-    fs := http.FileServer(http.Dir("app/static"))
+    fs := http.FileServer(http.Dir("static"))
     http.Handle("/static/", http.StripPrefix("/static/", fs))
 
     for _, file := range percorsi {http.HandleFunc(file.route, file.f)}
@@ -2510,61 +2191,11 @@ type ITEM_CUSTOMER struct {
 	Surname string `+"`json:\"surname\"`"+`
 	Address string `+"`json:\"address\"`"+`
 }
-//* order
-type ITEM_ORDER_DETAILS struct {
-	Quantity int `+"`json:\"quantity\"`"+`
-	Product int `+"`json:\"product\"`"+`
-	Description string `+"`json:\"description\"`"+`
-}
-type ITEM_ORDER struct {
-	Id int `+"`json:\"id\"`"+`
-	Name string `+"`json:\"name\"`"+`
-	Customer int `+"`json:\"customer\"`"+`
-	Details ITEM_ORDER_DETAILS `+"`json:\"customer\"`"+`
-}
-//* storehouse
-type ITEM_STOREHOUSE_MATERIALS struct {
-	Id int `+"`json:\"id\"`"+`
-	Name string `+"`json:\"name\"`"+`
-	Free int `+"`json:\"free\"`"+`
-	Blocked int `+"`json:\"blocked\"`"+`
-
-}
-type ITEM_STOREHOUSE_PRODUCT struct {
-	Id int `+"`json:\"id\"`"+`
-	Name string `+"`json:\"name\"`"+`
-	Status int `+"`json:\"status\"`"+`
-	Materials []int `+"`json:\"materials\"`"+`
-}
-type STOREHOUSE struct {
-	Materials []ITEM_STOREHOUSE_MATERIALS `+"`json:\"materials\"`"+`
-	Products []ITEM_STOREHOUSE_PRODUCT `+"`json:\"products\"`"+`
-}
-
 //============================== METHODS ==============================
 
-//TODO CREARE FUNZIONE O MEGLIO METODI D'ASSEGNARE AD UNA CLASSE  
-func GET_STOREHOUSE() (STOREHOUSE, error) {
-	var storehouse STOREHOUSE
-	data, err := os.ReadFile("app/database/storehouse.json")
-	if err != nil { return storehouse, err}
-	err = json.Unmarshal(data, &storehouse)
-	if err != nil {return storehouse, err}
-
-	return storehouse, nil
-}
-func GET_ORDERS() ([]ITEM_ORDER, error) {
-	var orders []ITEM_ORDER
-	data, err := os.ReadFile("app/database/orders.json")
-	if err != nil { return orders, err}
-	err = json.Unmarshal(data, &orders)
-	if err != nil {return orders, err}
-
-	return orders, nil
-}
 func GET_CUSTOMERS() ([]ITEM_CUSTOMER, error) {
 	var customers []ITEM_CUSTOMER
-	data, err := os.ReadFile("app/database/customers.json")
+	data, err := os.ReadFile("database/customers.json")
 	if err != nil { return customers, err}
 	err = json.Unmarshal(data, &customers)
 	if err != nil {return customers, err}
@@ -2575,189 +2206,15 @@ func GET_CUSTOMERS() ([]ITEM_CUSTOMER, error) {
 //============================== ROUTES ==============================
 //* FRONTEND
 func MAIN(w http.ResponseWriter, r *http.Request) { 
-	http.ServeFile(w, r, "app/index.html") 
+	http.ServeFile(w, r, "index.html") 
 }
 
 //============================== GET ==============================
-//* BACKEND
-func API_STOREHOUSE_FULL(w http.ResponseWriter, r *http.Request){
-	data, err := GET_STOREHOUSE()
-	if err != nil { http.Error(w, err.Error(), 500)}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(data)
-}
-func API_ORDERS_FULL(w http.ResponseWriter, r *http.Request){
-	data, err := GET_ORDERS()
-	if err != nil { http.Error(w, err.Error(), 500)}
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(data)
-}
 func API_CUSTOMERS_FULL(w http.ResponseWriter, r *http.Request){
 	data, err := GET_CUSTOMERS()
 	if err != nil { http.Error(w, err.Error(), 500)}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(data)
-}
-
-//============================== PUT ==============================
-func API_CUSTOMER_ADD(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Metodo non consentito", http.StatusMethodNotAllowed)
-		return
-	}
-	data, err := GET_CUSTOMERS()
-	if err != nil { http.Error(w, err.Error(), 500);return}
-
-	var input ITEM_CUSTOMER
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		http.Error(w, "JSON non valido", 415)
-		return
-	}
-
-	//Genera ID
-	lastID := -1
-	if len(data) > 0 {
-		lastID = data[len(data)-1].Id
-	}
-
-	newCustomer := ITEM_CUSTOMER{
-		Id:      lastID + 1,
-		Name:    input.Name,
-		Surname: input.Surname,
-		Address: input.Address,
-	}
-	data = append(data, newCustomer)
-
-	//Save
-	file, err := json.MarshalIndent(data, "", "  ")
-	if err != nil { http.Error(w, err.Error(), 500);return}
-
-
-	if err := os.WriteFile("app/database/customers.json", file, 0644); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	//Response
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(newCustomer)
-}
-func API_PRODUCT_ADD(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Metodo non consentito", 415)
-		return
-	}
-	data, err := GET_STOREHOUSE()
-	if err != nil { http.Error(w, err.Error(), 500);return}
-
-	var input ITEM_STOREHOUSE_PRODUCT
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		http.Error(w, "JSON non valido", 415)
-		return
-	}
-
-	for _, id := range input.Materials {
-		for _, material := range data.Materials {
-			//*Controllo se i materiali scelti sono disponibili
-			if(material.Id == id){
-				count_after_operation := material.Free-1
-				if(count_after_operation < 0){
-					//TODO aggiungere 'quale articolo?'
-					http.Error(w,"Materiale non disponibile",500)
-					return
-				
-				} else {
-					//*Blocco il materiale
-					material.Blocked += +1
-					material.Free += -1
-				}
-			}	
-		}
-	}
-	//Genera ID
-	lastID := -1
-	if len(data.Products) > 0 {
-		lastID = data.Products[len(data.Products)-1].Id
-	}
-
-	newProduct := ITEM_STOREHOUSE_PRODUCT{
-		Id:        lastID + 1,
-		Name:      input.Name,
-		Status:    0,
-		Materials: input.Materials,
-	}
-
-	data.Products = append(data.Products, newProduct)
-
-	//Save
-	file, err := json.MarshalIndent(data, "", "  ")
-	if err != nil { http.Error(w, err.Error(), 500);return}
-
-
-	if err := os.WriteFile("app/database/storehouse.json", file, 0644); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	//Response
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(newProduct)
-}
-func API_MATERIAL_ADD(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "solo metodo POST", 415)
-		return
-	}
-	data, err := GET_STOREHOUSE()
-	if err != nil { http.Error(w, err.Error(), 500);return}
-
-	var updateMaterial ITEM_STOREHOUSE_MATERIALS
-	if err := json.NewDecoder(r.Body).Decode(&updateMaterial); err != nil {
-		http.Error(w, "Parsing JSON Error", 415)
-		return
-	}
-
-
-	if updateMaterial.Id != -1 {
-		for i, d := range data.Materials {
-			//DEBUG
-			//log.Printf("ID_frontend: %v; ID_db: %v", updateMaterial.Id, d.Id)
-			
-			if d.Id == updateMaterial.Id {
-				data.Materials[i].Free += updateMaterial.Free
-				updateMaterial = data.Materials[i]
-			}
-		}
-
-	} else {
-		//*Aggiungi il nuovo materiale se non esiste
-		var lastID int
-		if len(data.Materials) > 0 {
-			lastID = data.Materials[len(data.Materials)-1].Id
-		}
-		newMaterial := ITEM_STOREHOUSE_MATERIALS{
-			Id:      lastID+1,
-			Name:    updateMaterial.Name,
-			Free:    updateMaterial.Free,
-			Blocked: 0,
-		}
-		data.Materials = append(data.Materials, newMaterial)
-	}
-
-
-	//Save
-	file, err := json.MarshalIndent(data, "", "  ")
-	if err != nil { http.Error(w, err.Error(), 500);return}
-
-
-	if err := os.WriteFile("app/database/storehouse.json", file, 0644); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-
-	//Response
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(updateMaterial)
 }`
 	BACKEND_GOLANG_ROUTES = `
 package main 
@@ -2775,14 +2232,7 @@ type Percorso struct{
 var percorsi = []Percorso{
     {route: "/",  f: MAIN,},
     
-	{route: "/db/storehouse/get", f: API_STOREHOUSE_FULL,},
-    {route: "/db/orders/get",     f: API_ORDERS_FULL,},
     {route: "/db/customers/get",  f: API_CUSTOMERS_FULL,},
-
-    {route: "/db/customers/add",  f: API_CUSTOMER_ADD,},
-    {route: "/db/storehouse/materials/add",  f: API_MATERIAL_ADD,},
-    {route: "/db/storehouse/products/add",  f: API_PRODUCT_ADD,},
-    //{route: "/db/orders/add",  f: API_ORDERS_ADD,},
 }`
 )
 
@@ -2806,18 +2256,19 @@ const HTML_PAGE  = `
 
     <!--libs-->
     <link rel="stylesheet" href="static/css/home.css">
-    <link rel="stylesheet" href="static/css/libs/cards/simple.css">
-    <link rel="stylesheet" href="static/css/libs/cards/card-example-home.css">
+    <link rel="stylesheet" href="static/css/libs/cards/init.css">
     <link rel="stylesheet" href="static/css/libs/aside/init.css">
     <link rel="stylesheet" href="static/css/libs/popup/init.css">
     <link rel="stylesheet" href="static/css/libs/nav/init.css">
     <link rel="stylesheet" href="static/css/libs/models/init.css">
-    <link rel="stylesheet" href="static/css/libs/table/init.css">
+    <link rel="stylesheet" href="static/css/libs/tables/init.css">
     <link rel="stylesheet" href="static/css/libs/chart/init.css">
     
-    <script src="static/js/deps/anychart-bundle.min.js"></script>
-    <link href= "static/js/deps/anychart-font.min.css" type="text/css" rel="stylesheet">
-    <link href= "static/js/deps/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <!--CDNs -->
+    <script src="https://cdn.anychart.com/releases/8.14.1/js/anychart-bundle.min.js"></script>
+    <link href="https://cdn.anychart.com/releases/8.14.1/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/8.14.1/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   </head>
   <body>
@@ -2859,12 +2310,11 @@ const HTML_PAGE  = `
     <script src="static/js/libs/chart/init.js" ></script>
     <script src="static/js/libs/nav/init.js" ></script>
     <script src="static/js/libs/routes.js" ></script>
-    <script src="static/js/libs/cards/simple.js" ></script>
-    <script src="static/js/libs/cards/card-example-home.js" ></script>
+    <script src="static/js/libs/cards/init.js" ></script>
     <script src="static/js/libs/popup/init.js" ></script>
     <script src="static/js/libs/models/init.js" ></script>
     <script src="static/js/libs/aside/init.js" ></script>
-    <script src="static/js/libs/table/init.js"></script>
+    <script src="static/js/libs/tables/init.js"></script>
 
     <script>new Routes().dashboard()</script>
     

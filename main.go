@@ -61,6 +61,11 @@ func main() {
 	createFile("package.json", PACKAGEJSON)
 	createFile("tsconfig.json", TSCONFIG)
 	createFile(filepath.Join("app", "index.html"), HTML_PAGE)
+	
+	log.Println("CREAZIONE AMBIENTE-FRONTEND COMPLETATO")
+
+	createDATABASE()
+	createFile(filepath.Join("app", "database", "customers.json"), `[{"id": 0, "name": "customer1", "surname": "asdasd", "address": "adasd"}]`)
 
 
 	if backend != "" {
@@ -74,6 +79,7 @@ func main() {
 
 		}
 	}
+	log.Println("CREAZIONE AMBIENTE-BACKEND COMPLETATO")
 }
 
 
@@ -94,10 +100,14 @@ func createFileCSS(name string, file_content string){
 
 func createFileTS(name string, file_content string){
 	os.WriteFile(
-		filepath.Join(project, "ts", name+".ts"), 
+		filepath.Join(project, "ts", "libs", name+".ts"), 
 		[]byte(file_content),
 		0644,
 	)
+}
+
+func createDATABASE(){
+	os.MkdirAll(filepath.Join(project, "app", "database"), 0755)
 }
 
 func createCSS(frontend map[string]string){
