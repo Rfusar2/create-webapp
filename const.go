@@ -2309,22 +2309,157 @@ type Data = ItemCustomer[] | ItemOrder[] | ItemStoreHouseMaterial[] | ItemStoreH
 //const observer = new MutationObserver(callback_mutation);
 //observer.observe(handler_colorschema, {attributes:true})`
 
+    FRONTEND_APP_CSS = `
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --bg-card: #1A1B24;
+    /*
+    --bg-body: #fafafb;
+    --bg-body: linear-gradient(to top, #07080f, #121529);
+    --bg-body: linear-gradient(to top, #475154, #272f30);
+     */
+    --bg-body: linear-gradient(to top, #3A4154, #232330);
+
+    --yellow-text: #fcba03;
+
+
+
+    --color-text: #fff;
+    --light-blue: #5ED3EC;
+    --get-pro: #0FFC03;
+    --error: #FA020F;
+    --width-sidebar: 200px
+}
+
+* {
+    margin:0;
+    padding:0;
+    color: #fff9;
+}
+
+#data-colorschema{
+    position:absolute;
+    top :0;
+    visibility: hidden;
+}
+
+body {
+    /*
+    font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+
+    */
+    font-family: "Roboto", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
+    font-variation-settings: "wdth" 100;
+    font-size: 15px;
+    overflow:hidden;
+
+}
+
+#app {
+    display: grid;
+    grid-template-columns: 200px 400px;
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+#app[data-colorschema="light"]{background: #fafafb;}
+#app[data-colorschema="dark"]{background: var(--bg-body);}
+
+#page-container{
+    width:calc(100vw - var(--width-sidebar))
+
+}
+
+#page {
+    padding: 20px;
+}
+
+/* CONFIG PAGES */
+.page-documents, .page-models {
+    display: flex;
+    justify-content: center;
+}
+
+
+/* Buttons */
+.btn {padding: 5px 8px; border-radius: 5px;background:transparent;cursor:pointer;transition:300ms}
+
+.btn-primary {border: 1px solid var(--light-blue); color: var(--light-blue)}
+.btn-error {border: 1px solid var(--error); color: var(--error)}
+.btn-success {border: 1px solid var(--get-pro); color: var(--get-pro)}
+.btn-warning {border: 1px solid var(--yellow-text); color: var(--yellow-text)}
+
+.btn-primary:hover {background: var(--light-blue); color: #fff}
+.btn-error:hover {background: var(--error); color: #fff}
+.btn-success:hover {background: var(--get-pro); color: #fff}
+.btn-warning:hover {background: var(--yellow-text); color: #fff}`
+    FRONTEND_HOME_CSS = `
+@keyframes open-large-section1 {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+#home-section1{
+    display:flex;
+    justify-content: space-between;
+    padding: 10px;
+    animation: open-large-section1 500ms linear forwards;
+    width: 100%;
+}
+
+#home-section1[data-colorschema="dark"]{
+    background: var(--bg-card);
+    border: 1px solid #fff2;
+}
+#home-section1[data-colorschema="light"]{
+    background: #fff;
+    border: 1px solid #0002;
+}
+
+
+
+#home-section1-box2{
+    display: flex;
+    justify-content: space-around;
+}
+
+
+
+
+#home-section2{
+    padding-top: 30px;
+}`
+
 //*LIBS CONFIG
 	PACKAGEJSON = `
 {
+  "name": "dashboard tools",
+  "version": "0.3.0",
+  "description": "",
   "scripts": {
+    "build-css": "postcss style.css -o ./full.min.css",
+    "build-js": "esbuild index.js --minify --outfile=./full.min.js",
+    "dev": "live-server . --port=3000 --open=./index.html",
     "start": "tsc --watch",
-    "init": "tsc --init"
+    "compile": "tsc"
   },
   "devDependencies": {
+    "cssnano": "^6.0.0",
+    "esbuild": "^0.27.4",
+    "live-server": "^1.2.2",
+    "postcss-cli": "^10.1.0",
     "typescript": "^6.0.2"
   }
 }`
 	TSCONFIG = `
 {
   "compilerOptions": {
-    "outDir": "./app/static/js",
-    "rootDir": "./frontend/source",
+    "outDir": "./static/js",
+    "rootDir": "./ts",
     "module": "commonjs",
     "target": "es2021",
     "strict": true
