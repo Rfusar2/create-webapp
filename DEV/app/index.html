@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Home</title>
+  
+    <link rel="stylesheet" href="static/css/app.css">
+
+    <!--libs-->
+    <link rel="stylesheet" href="static/css/home.css">
+    <link rel="stylesheet" href="static/css/libs/cards/init.css">
+    <link rel="stylesheet" href="static/css/libs/aside/init.css">
+    <link rel="stylesheet" href="static/css/libs/popup/init.css">
+    <link rel="stylesheet" href="static/css/libs/nav/init.css">
+    <link rel="stylesheet" href="static/css/libs/models/init.css">
+    <link rel="stylesheet" href="static/css/libs/tables/init.css">
+    <link rel="stylesheet" href="static/css/libs/chart/init.css">
+    
+    <!--CDNs -->
+    <script src="https://cdn.anychart.com/releases/8.14.1/js/anychart-bundle.min.js"></script>
+    <link href="https://cdn.anychart.com/releases/8.14.1/css/anychart-ui.min.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.anychart.com/releases/8.14.1/fonts/css/anychart-font.min.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  </head>
+  <body>
+
+      <div id="data-colorschema"></div>
+    
+      <main id="app" data-colorschema="dark">
+        
+        <aside id="sidebar">
+          <header></header>
+          <section>
+            <ul id="container-aside-items">
+              <li class="aside-item">
+                <div class="container-circle">
+                    <div class="circle"></div>
+                </div>
+                <div><a></a></div>
+              </li>
+            </ul>
+            <footer>
+            </footer>
+          </section>
+        </aside>
+
+        <section id="page-container">  
+          <nav id="nav" data-colorschema="dark"></nav>
+          <main id="page" data-colorschema="dark">
+            
+
+          </main>
+        </section>  
+
+      </main>
+
+
+    <!--libs-->
+    <script src="static/js/libs/dbConnection.js" ></script>
+    <script src="static/js/libs/utils.js" ></script>
+    <script src="static/js/libs/chart/init.js" ></script>
+    <script src="static/js/libs/nav/init.js" ></script>
+    <script src="static/js/libs/routes.js" ></script>
+    <script src="static/js/libs/cards/init.js" ></script>
+    <script src="static/js/libs/popup/init.js" ></script>
+    <script src="static/js/libs/models/init.js" ></script>
+    <script src="static/js/libs/aside/init.js" ></script>
+    <script src="static/js/libs/tables/init.js"></script>
+
+    <script>new Routes().dashboard()</script>
+    
+
+  </body>
+</html>

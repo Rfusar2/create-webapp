@@ -1,0 +1,10 @@
+
+{
+  "compilerOptions": {
+    "outDir": "./app/static/js",
+    "rootDir": "./ts",
+    "module": "commonjs",
+    "target": "es2021",
+    "strict": true
+  }
+}
