@@ -1,9 +1,8 @@
 "use strict";
 class MyInput {
-    constructor({ props, tag, options, label, event, regex }) {
+    constructor({ props, tag, options, label, event, regex, choices }) {
         this.obj = new TAG_HTML(tag ? tag : "input").props(props).obj;
         this.input = this.obj;
-        this.regex = regex;
         switch (tag) {
             case "select":
                 if (options) {
@@ -30,5 +29,16 @@ class MyInput {
                 this.input.style.borderBottom = "1px solid " + color;
             });
         }
+        if (choices) {
+            this.load(choices);
+        }
+    }
+    async load(choices) {
+        const data = await choices.conn();
+        console.log(data);
+        const texts = new Map();
+        data.map((e) => texts.set(e[choices.name_column], e.id));
+        const options = Array.from(texts).map(([text, id]) => new Option(text, String(id)));
+        this.input.append(...options);
     }
 }

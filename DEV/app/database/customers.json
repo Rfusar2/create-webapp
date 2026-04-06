@@ -1,1 +1,7 @@
-[{"id": 0, "name": "customer1", "surname": "asdasd", "address": "adasd"}]
+[
+    {"id": 0, "name": "customer1", "surname": "asdasd", "address": "adasd"},
+    {"id": 1, "name": "asdasd", "surname": "asdasd", "address": "adasd"},
+    {"id": 2, "name": "customer1", "surname": "asdasd", "address": "adasd"},
+    {"id": 3, "name": "c", "surname": "asdasd", "address": "adasd"},
+    {"id": 4, "name": "customer1", "surname": "asdasd", "address": "adasd"}
+]

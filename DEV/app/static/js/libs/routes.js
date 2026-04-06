@@ -16,16 +16,18 @@ class Routes {
         s1.id = "home-section1";
         //*QUERY DB
         await this.db.ready;
-        new Model({
-            conn: async () => { },
-            type: ConfigModelTypes.RIGHT,
-            title: "ualala",
-            inputs: [
-                new MyInput({
-                    props: { placeholder: "ok" },
-                    regex: /[a-z]{5}[0-9]{3}/,
-                }),
-            ]
+        new Table({
+            e: new TAG_HTML("table").class(["table"]).obj,
+            parent: s1,
+            title: "Customers",
+            dimension: "small",
+            style: "paging",
+            tools: { n_pag: true, n_rows: true, search: true, settings: true },
+            ths: ["id", "name", "surname"],
+            conn: async () => {
+                let res = await fetch("db/customers/get");
+                return await res.json();
+            }
         });
     }
 }

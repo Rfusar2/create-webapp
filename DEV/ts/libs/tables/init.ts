@@ -4,6 +4,7 @@ type SettingsTools = {
     search: boolean;
     settings: boolean;
 }
+const TAG_ID = "id"
 type TableDimension = "small" | "large";
 type TableStyle = "simple" | "paging";
 type TableFilterColumns = "storehouse" | "orders" | "customers"; //Sperimentale
@@ -142,7 +143,7 @@ class FooterTable {
 
     setCurrentPage(){
         this.btn_prec.style.opacity = this.n_pag+1 > 1 ? "1" : "0";
-        this.span.textContent = `${this.n_pag+1}-${this.n_pages}`;
+        this.span.textContent = String(this.n_pag+1)+"-"+String(this.n_pages);
     }
 }
 
@@ -182,7 +183,7 @@ class ContentTable {
         this.tbody.setAttribute("label", "tbody");
         this.obj.append(this.thead, this.tbody);
 
-        this.init(parent, width_columns)
+        this.ready = this.init(parent, width_columns)
     }
 
     async init(parent, width_columns) {
@@ -197,15 +198,16 @@ class ContentTable {
         //*nel caso non sia settata la lunghezza delle colonne
         let style = ".row, .table-titles { grid-template-columns: " 
         const addStyle = new TAG_HTML("style").obj
+        const ths = this.ths.filter((e:string)=>e!==TAG_ID)
 
         if(!width_columns){ 
             //const n_columns = Object.keys(this.data[0]).length;
-            const n_columns = Object.keys(this.ths).length;
+            const n_columns = ths.length;
             const width_table = parent.getBoundingClientRect().width;
             const width_column = Math.floor(width_table / n_columns)-2;
-            style+=`repeat(${n_columns}, ${width_column}px) }`
+            style+= "repeat("+String(n_columns)+", "+String(width_column)+"px) }"
         }
-        else { style+=`${width_columns} }`}
+        else { style+=String(width_columns)+" }"}
         addStyle.textContent = style;
         SELECT.one("head").append(addStyle)
     }
@@ -214,7 +216,8 @@ class ContentTable {
         await this.getDBData()
         let riga = new TAG_HTML("div").class(["table-titles"]).obj;
         //for(const th_text of Object.keys(this.data[0])){
-        for(const th_text of this.ths){
+        const ths = this.ths.filter((e:string)=>e!==TAG_ID)
+        for(const th_text of ths){
             const container_th = new TAG_HTML("div")
                 .class(["container-th"])
                 .attr({colorschema: "dark"}).obj;
@@ -234,9 +237,12 @@ class ContentTable {
             const riga = new TAG_HTML("div").class([i%2==0 ? "row-0" : "row-1", "row"]).obj;
 
             for(const [k, v] of Object.entries(record)){
-                const container_td = new TAG_HTML("div")
-                    .class(["container-td"])
-                    .attr({colorschema: "dark"}).obj;
+                console.log(record)
+                if(k==TAG_ID){
+                    riga.setAttribute("record-id", v)
+                    continue
+                }
+                const container_td = new TAG_HTML("div").class(["container-td"]).attr({colorschema: "dark"}).obj;
 
                 const td = new TAG_HTML("span").props({textContent: v}).obj;
                 
@@ -363,7 +369,7 @@ class Table {
         parent.append(e)
         this.obj = e;
         this.obj.setAttribute("data-colorschema", "dark")
-        this.obj.classList.add(`table-${dimension}`);
+        this.obj.classList.add("table-"+dimension);
         this.settings.tools = tools;
         
         this.header = new HeaderTable(this.settings.tools, title,this.obj);
@@ -374,21 +380,24 @@ class Table {
             ths: ths
         });
 
+        this.loadContent({style, tools, conn})
+
     }
 
     async loadContent({style, tools, conn}: {style:TableStyle, tools: SettingsTools, conn:()=>Promise<[void, void]> | undefined}){
-        //console.log(this.table)
         await this.table.ready
-        //console.log(this.table)
+        console.log(style)
         switch(style){
             case "paging": {
                 const N_PAGES = this.table.pages.length;
                 const footer = new FooterTable(0, N_PAGES);
-                this.obj.append(footer.obj); break;
+                console.log(N_PAGES, this.obj, footer)
+                this.obj.append(footer.obj);
                 this.footer = footer;
                 break;
             }
         }
+        console.log(this.obj)
         this.set_events();
     }
 

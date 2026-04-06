@@ -2,6 +2,10 @@ type ConfigInputEvent = {
     type: string;
     func: ()=>void;
 }
+type ConfigInputChoices = {
+    conn: Promise<void>;
+    name_column: string;
+}
 type ConfigInputProps = {
     props: object;
     tag?: string;
@@ -9,16 +13,17 @@ type ConfigInputProps = {
     label?: string;
     event?: ConfigModelInputEvent;
     regex?: RagExp;
+    choices?: ConfigInputChoices; 
 }
 
 class MyInput {
     obj: HTMLElement;
     input: HTMLInputElement;
 
-    constructor({props, tag, options, label, event, regex}:ConfigModelInputProps){
+    constructor({props, tag, options, label, event, regex, choices}:ConfigModelInputProps){
         this.obj = new TAG_HTML(tag ? tag : "input").props(props).obj
         this.input = this.obj
-        this.regex = regex
+
         switch(tag){
             case "select": 
                 if(options) {console.log(this.obj, label, options); this.obj.append(...options);} break; 
@@ -41,5 +46,16 @@ class MyInput {
                 this.input.style.borderBottom = "1px solid "+color;
             })
         }
+
+        if(choices){ this.load(choices) }
+    }
+
+    async load(choices:ConfigInputChoices):HTMLElement[]{
+        const data = await choices.conn()
+        console.log(data)
+        const texts = new Map<string, int>();
+        data.map((e:any)=>texts.set(e[choices.name_column], e.id))
+        const options = Array.from(texts).map(([text, id])=>new Option(text, String(id)))
+        this.input.append(...options)
     }
 }
