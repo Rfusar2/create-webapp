@@ -1,0 +1,4 @@
+creazione componente carta dettaglio 
+e aggiunta gestion update /update
+
+da tabella a carta a queryDB
