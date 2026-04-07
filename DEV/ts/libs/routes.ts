@@ -1,4 +1,3 @@
-
 class Routes {
     main = SELECT.one("#page");
     db = DATABASE
@@ -96,10 +95,13 @@ class Routes {
         new CardDetails({
             parent: s1,
             title: "",
-            conn: async(e)=>{
+            conn: async(e, inputs)=>{
                 e.preventDefault()
-                let res = await fetch("/db/documents/get")
-                console.log(await res.text())
+                if(inputs.filter((e:MyInput)=>!e.valid).length == 0){
+                    //TODO FARE REQUEST
+
+
+                }
             },
             sections: [
                 {
@@ -121,36 +123,16 @@ class Routes {
                 {
                     title: "Dettaglio", 
                     inputs: [
-                        new MyInput({
-                            label: "Numero Bolletta", value: record.nDocument
-                        }),
-                        new MyInput({
-                            label: "Data Emissione", value: record.issueDate
-                        }),
-                        new MyInput({
-                            label: "Descrizione", value: record.description
-                        }),
-                        new MyInput({
-                            label: "Durata Fornitura", value: record.typeProviding
-                        }),
-                        new MyInput({
-                            label: "Totale Importo", value: record.totalAmount
-                        }),
-                        new MyInput({
-                            label: "Scadenza", value: record.expirationDate
-                        }),
-                        new MyInput({
-                            label: "Consumo", value: `${record.consumption} ${record.unitOfMeasurement}`
-                        }),
-                        new MyInput({
-                            label: "Consumo Annuo", value: `${record.annualConsumption} ${record.unitOfMeasurement}`
-                        }),
-                        new MyInput({
-                            label: "Periodo Di Consumo", value: record.consumptionPeriod
-                        }),
-                        new MyInput({
-                            label: record.identificationType, value: record.identificationValue
-                        }),
+                        new MyInput({ label: "Numero Bolletta", value: record.nDocument, regex: /^[0-9]+$/ }),
+                        new MyInput({ label: "Data Emissione", value: record.issueDate, regex: /^[0-9]{2}\/[0-9]{2}\/20[0-9]{2}$/ }),
+                        new MyInput({ label: "Descrizione", value: record.description }),
+                        new MyInput({ label: "Durata Fornitura", value: record.typeProviding }),
+                        new MyInput({ label: "Totale Importo", value: record.totalAmount }),
+                        new MyInput({ label: "Scadenza", value: record.expirationDate }),
+                        new MyInput({ label: "Consumo", value: `${record.consumption} ${record.unitOfMeasurement}` }),
+                        new MyInput({ label: "Consumo Annuo", value: `${record.annualConsumption} ${record.unitOfMeasurement}` }),
+                        new MyInput({ label: "Periodo Di Consumo", value: record.consumptionPeriod }),
+                        new MyInput({ label: record.identificationType, value: record.identificationValue }),
                     ]
                 },
                 {

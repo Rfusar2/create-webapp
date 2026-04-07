@@ -38,11 +38,13 @@ class MyInput {
                 if(options) {this.input.append(...options);} break; 
         }
 
-        
-
         if (classes){ this.input.classList.add(...classes) }
-
         if(event){ this.input.addEventListener(event.type, event.func) }
+
+        //*PULIZIA
+        this.input.addEventListener("blur", ()=>{
+            this.input.value = this.input.value.trim()
+        })
 
         if(regex){
             this.input.addEventListener("blur", ()=>{
@@ -50,6 +52,13 @@ class MyInput {
                 const color = correct ? SELECT.style("--light-blue") : "red";
                 this.input.style.borderBottom = "1px solid "+color;
                 this.valid = correct
+                if(!correct){
+                    new Popup({
+                        type: "right",
+                        text: `CAMPO: ${this.label.textContent} non valido`,
+                        status: ConfigPopupStatus.KO
+                    })
+                }
             })
         }
 

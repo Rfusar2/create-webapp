@@ -1,0 +1,40 @@
+[
+{
+  "id": "asd76aas6da5s7d6as5d7sd",
+  "type": "GAS",
+  "nDocument": "13024228",
+  "issueDate": "21/10/2025",
+  "description": "Gas Casa - Prezzo Mono indicizzato PSV + spread QVD+5",
+  "typeProviding": "A TEMPO INDETERMINATO",
+  "totalAmount": "32",
+  "expirationDate": "20/11/2025",
+  "consumption": "13.96",
+  "annualConsumption": "735.84",
+  "consumptionPeriod": "01/09/2025 30/09/2025",
+  "unitOfMeasurement": "SMC",
+  "identificationType": "PDR",
+  "status": "attivo",
+  "identificationValue": "00880000337090",
+  "billing": {
+    "address": {
+      "street": "VIA MMMM",
+      "civic": "24",
+      "zipcode": "20999",
+      "city": "citta",
+      "province": "MB"
+    }
+  },
+  "customer": {
+    "name": "MARIO",
+    "surname": "ROSSI",
+    "taxId": "BLD88888862F205F",
+    "address": {
+      "street": "VIA VIMERCATE",
+      "civic": "24",
+      "zipcode": "20876",
+      "city": "ORNAGO",
+      "province": "MB"
+    }
+  }
+}
+]

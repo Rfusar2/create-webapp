@@ -28,6 +28,6 @@ class CardDetails {
             }
         }
         this.footer.append(this.btn_modify);
-        this.btn_modify.addEventListener("click", conn);
+        this.btn_modify.addEventListener("click", async (e) => await conn(e, this.inputs));
     }
 }
