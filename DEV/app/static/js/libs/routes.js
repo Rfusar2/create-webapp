@@ -16,18 +16,22 @@ class Routes {
         s1.id = "home-section1";
         //*QUERY DB
         await this.db.ready;
-        new Table({
-            e: new TAG_HTML("table").class(["table"]).obj,
+        new CardDetails({
             parent: s1,
-            title: "Customers",
-            dimension: "small",
-            style: "paging",
-            tools: { n_pag: true, n_rows: true, search: true, settings: true },
-            ths: ["id", "name", "surname"],
-            conn: async () => {
-                let res = await fetch("db/customers/get");
-                return await res.json();
-            }
+            title: "Dettaglio Customer",
+            sections: [
+                {
+                    title: "titolo1",
+                    inputs: [
+                        new MyInput({
+                            regex: /[a-zA-XZ]/,
+                            props: {
+                                placeholder: "inserisci qualcosa",
+                            },
+                        }),
+                    ]
+                }
+            ]
         });
     }
 }

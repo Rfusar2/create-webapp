@@ -16,6 +16,7 @@ func main() {
 		"cards":  FRONTEND_CARDS_SIMPLE_TS,
 		"chart":  FRONTEND_CHART_TS,
 		"models": FRONTEND_MODELS_TS,
+		"details": FRONTEND_DETAILS_TS,
 		"nav":    FRONTEND_NAV_TS,
 		"tables": FRONTEND_TABLES_TS,
 		"popup":  FRONTEND_POPUP_TS,
@@ -36,7 +37,7 @@ func main() {
 	//"routes": FRONTEND_ROUTES_TS,
 	//"utils": FRONTEND_UTILS_TS,
 
-	re_backend := regexp.MustCompile(`--backend=(local|golang|flask)`)
+	re_backend := regexp.MustCompile(`--backend=(local|online)`)
 	re_project := regexp.MustCompile(`--project=([a-zA-Z0-9]+)`)
 
 	for _, a := range os.Args[1:] {
@@ -70,7 +71,7 @@ func main() {
 
 
 	if backend != "" {
-		if backend == "golang" {
+		if backend == "local" {
 			createFile(filepath.Join("app", "server.go"), BACKEND_GOLANG_MAIN)
 			createFile(filepath.Join("app", "routes.go"), BACKEND_GOLANG_ROUTES)
 			createFile(filepath.Join("app", "utils.go"),  BACKEND_GOLANG_UTILS)

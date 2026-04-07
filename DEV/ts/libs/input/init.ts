@@ -52,7 +52,6 @@ class MyInput {
 
     async load(choices:ConfigInputChoices):HTMLElement[]{
         const data = await choices.conn()
-        console.log(data)
         const texts = new Map<string, int>();
         data.map((e:any)=>texts.set(e[choices.name_column], e.id))
         const options = Array.from(texts).map(([text, id])=>new Option(text, String(id)))
