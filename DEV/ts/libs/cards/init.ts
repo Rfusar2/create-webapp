@@ -8,7 +8,7 @@ type ConfigCardForm = {
     conn: (data:object)=>Promise<void>;
     title: string;
     model: ConfigModelTypes;
-    inputs: ConfigModelInput[]
+    inputs: MyInput[]
 }
 
 type ConfigCardProps = {

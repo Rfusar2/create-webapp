@@ -7,38 +7,40 @@ type ConfigInputChoices = {
     name_column: string;
 }
 type ConfigInputProps = {
-    props: object;
+    props?: object;
     tag?: string;
     options?: HTMLOptionElement[];
-    label?: string;
+    label: string;
     event?: ConfigModelInputEvent;
     regex?: RagExp;
     choices?: ConfigInputChoices; 
+    classes?: string[]
 }
 
 class MyInput {
-    obj: HTMLElement;
+    obj = new TAG_HTML("div").obj;
+    tag: string;
     input: HTMLInputElement;
+    label: HTMLElement;
 
-    constructor({props, tag, options, label, event, regex, choices}:ConfigModelInputProps){
-        this.obj = new TAG_HTML(tag ? tag : "input").props(props).obj
-        this.input = this.obj
+    constructor({props, tag, options, label, event, regex, choices, classes}:ConfigModelInputProps){
+        this.tag = tag ? tag : "input"
+        this.input = new TAG_HTML(this.tag).class(["input"]).obj
+        this.label = new TAG_HTML("label").class(["label"]).props({textContent: label}).obj
+        this.obj.classList.add(`container-${this.tag}`)
+        this.obj.append(this.label, this.input)
 
         switch(tag){
             case "select": 
-                if(options) {console.log(this.obj, label, options); this.obj.append(...options);} break; 
+                if(options) {this.input.append(...options);} break; 
         }
-        
-        if(event){ this.obj.addEventListener(event.type, event.func) }
 
-        if(label){
-            const input = this.obj;
-            this.input = input
-            const container = new TAG_HTML("div").class(["model-input-select"]).obj
-            const name_input = new TAG_HTML("label").props({textContent: label}).obj
-            container.append(name_input, input)
-            this.obj = container
-        }
+        
+
+        if (classes){ this.input.classList.add(...classes) }
+
+        if(event){ this.input.addEventListener(event.type, event.func) }
+
         if(regex){
             this.input.addEventListener("blur", ()=>{
                 const correct = regex.test(this.input.value);
@@ -47,7 +49,9 @@ class MyInput {
             })
         }
 
+
         if(choices){ this.load(choices) }
+
     }
 
     async load(choices:ConfigInputChoices):HTMLElement[]{
@@ -57,4 +61,10 @@ class MyInput {
         const options = Array.from(texts).map(([text, id])=>new Option(text, String(id)))
         this.input.append(...options)
     }
+
+    //labelEvent(){
+    //    this.input.addEventListener("focus", ()=> this.label.style.transform = "scale(80%)")
+    //    this.input.addEventListener("blur", ()=> this.label.style.transform = "scale(100%)")
+
+    //}
 }

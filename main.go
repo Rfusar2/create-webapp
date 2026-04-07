@@ -26,10 +26,12 @@ func main() {
 		"aside":  FRONTEND_ASIDE_CSS,
 		"cards":  FRONTEND_CARDS_SIMPLE_CSS,
 		"chart":  FRONTEND_CHART_CSS,
+		"details": FRONTEND_DETAILS_CSS,
 		"models": FRONTEND_MODELS_CSS,
 		"nav":    FRONTEND_NAV_CSS,
 		"tables": FRONTEND_TABLES_CSS,
 		"popup":  FRONTEND_POPUP_CSS,
+		"input":  FRONTEND_INPUT_CSS,
 	}
 
 
@@ -57,9 +59,12 @@ func main() {
 	createCSS(FRONTEND_CSS)
 	createFileCSS("home", FRONTEND_HOME_CSS)
 	createFileCSS("app", FRONTEND_APP_CSS)
+	createFileCSS("progetti", FRONTEND_PROGETTI_CSS)
+
 	createFileTS("dbConnection", FRONTEND_DBCONNECTION_TS)
 	createFileTS("routes", FRONTEND_ROUTES_TS)
 	createFileTS("utils", FRONTEND_UTILS_TS)
+	
 	createFile("package.json", PACKAGEJSON)
 	createFile("tsconfig.json", TSCONFIG)
 	createFile(filepath.Join("app", "index.html"), HTML_PAGE)

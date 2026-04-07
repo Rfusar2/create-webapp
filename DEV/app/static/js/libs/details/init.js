@@ -1,7 +1,7 @@
 "use strict";
 class CardDetails {
     constructor({ parent, title, sections }) {
-        this.obj = new TAG_HTML("main").id("card-datails-record").obj;
+        this.obj = new TAG_HTML("main").id("card-details-customer").obj;
         this.header = new TAG_HTML("header").obj;
         this.main = new TAG_HTML("main").obj;
         this.obj.append(this.header, this.main);
@@ -13,9 +13,12 @@ class CardDetails {
         for (const s of sections) {
             const container = new TAG_HTML("section").obj;
             const [b1, b2] = ["div", "div"].map((e) => new TAG_HTML(e).obj);
-            b1.append(new TAG_HTML("h3").props({ textContent: s.title }).obj);
+            b1.append(new TAG_HTML("h2").props({ textContent: s.title }).obj);
+            b2.classList.add("card-details-container-inputs");
             for (const input of s.inputs) {
-                b2.append(input.obj);
+                const wrap = new TAG_HTML("div").obj;
+                wrap.append(input.obj);
+                b2.append(wrap);
             }
             container.append(b1, b2);
             this.main.append(container);

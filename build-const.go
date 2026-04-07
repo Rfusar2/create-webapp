@@ -38,6 +38,8 @@ func main(){
 	createVAR("FRONTEND_ASIDE_CSS", filepath.Join(WORKDIR_CSS_LIBS, "aside", "init.css"), &content_file)
 	createVAR("FRONTEND_CARDS_SIMPLE_CSS", filepath.Join(WORKDIR_CSS_LIBS, "cards", "init.css"), &content_file)
 	createVAR("FRONTEND_CHART_CSS", filepath.Join(WORKDIR_CSS_LIBS, "chart", "init.css"), &content_file)
+	createVAR("FRONTEND_DETAILS_CSS", filepath.Join(WORKDIR_CSS_LIBS, "details", "init.css"), &content_file)
+	createVAR("FRONTEND_INPUT_CSS", filepath.Join(WORKDIR_CSS_LIBS, "input", "init.css"), &content_file)
 	createVAR("FRONTEND_MODELS_CSS", filepath.Join(WORKDIR_CSS_LIBS, "models", "init.css"), &content_file)
 	createVAR("FRONTEND_NAV_CSS", filepath.Join(WORKDIR_CSS_LIBS, "nav", "init.css"), &content_file)
 	createVAR("FRONTEND_POPUP_CSS", filepath.Join(WORKDIR_CSS_LIBS, "popup", "init.css"), &content_file)
@@ -45,6 +47,7 @@ func main(){
 	
 	createVAR("FRONTEND_APP_CSS", filepath.Join(WORKDIR_CSS, "app.css"), &content_file)
 	createVAR("FRONTEND_HOME_CSS", filepath.Join(WORKDIR_CSS, "home.css"), &content_file)
+	createVAR("FRONTEND_PROGETTI_CSS", filepath.Join(WORKDIR_CSS, "progetti.css"), &content_file)
 	
 	//BACKEND
 	createVAR("BACKEND_GOLANG_MAIN", filepath.Join(WORKDIR_HOME, "server.go"), &content_file)

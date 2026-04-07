@@ -1,26 +1,24 @@
 "use strict";
 class MyInput {
-    constructor({ props, tag, options, label, event, regex, choices }) {
-        this.obj = new TAG_HTML(tag ? tag : "input").props(props).obj;
-        this.input = this.obj;
+    constructor({ props, tag, options, label, event, regex, choices, classes }) {
+        this.obj = new TAG_HTML("div").obj;
+        this.tag = tag ? tag : "input";
+        this.input = new TAG_HTML(this.tag).class(["input"]).obj;
+        this.label = new TAG_HTML("label").class(["label"]).props({ textContent: label }).obj;
+        this.obj.classList.add(`container-${this.tag}`);
+        this.obj.append(this.label, this.input);
         switch (tag) {
             case "select":
                 if (options) {
-                    console.log(this.obj, label, options);
-                    this.obj.append(...options);
+                    this.input.append(...options);
                 }
                 break;
         }
-        if (event) {
-            this.obj.addEventListener(event.type, event.func);
+        if (classes) {
+            this.input.classList.add(...classes);
         }
-        if (label) {
-            const input = this.obj;
-            this.input = input;
-            const container = new TAG_HTML("div").class(["model-input-select"]).obj;
-            const name_input = new TAG_HTML("label").props({ textContent: label }).obj;
-            container.append(name_input, input);
-            this.obj = container;
+        if (event) {
+            this.input.addEventListener(event.type, event.func);
         }
         if (regex) {
             this.input.addEventListener("blur", () => {
