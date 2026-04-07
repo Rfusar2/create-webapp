@@ -15,6 +15,7 @@ type ConfigInputProps = {
     regex?: RagExp;
     choices?: ConfigInputChoices; 
     classes?: string[]
+    value?: string;
 }
 
 class MyInput {
@@ -23,12 +24,14 @@ class MyInput {
     input: HTMLInputElement;
     label: HTMLElement;
 
-    constructor({props, tag, options, label, event, regex, choices, classes}:ConfigModelInputProps){
+    constructor({props, tag, options, label, event, regex, choices, classes, value}:ConfigModelInputProps){
         this.tag = tag ? tag : "input"
         this.input = new TAG_HTML(this.tag).class(["input"]).obj
         this.label = new TAG_HTML("label").class(["label"]).props({textContent: label}).obj
         this.obj.classList.add(`container-${this.tag}`)
         this.obj.append(this.label, this.input)
+        this.input.value = value ? value : ""
+        this.valid = true
 
         switch(tag){
             case "select": 
@@ -46,6 +49,7 @@ class MyInput {
                 const correct = regex.test(this.input.value);
                 const color = correct ? SELECT.style("--light-blue") : "red";
                 this.input.style.borderBottom = "1px solid "+color;
+                this.valid = correct
             })
         }
 

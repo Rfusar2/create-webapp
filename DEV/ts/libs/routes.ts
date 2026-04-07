@@ -36,10 +36,10 @@ class Routes {
                             props: {name: "customer-name"},
                             choices: {
                                 conn: async ()=>{
-                                    let res = await fetch("/db/customers/get", {method:"GET"})
+                                    let res = await fetch("/db/documents/get", {method:"GET"})
                                     return await res.json()
                                 },
-                                name_column: "name"
+                                name_column: "nDocuments"
                             }
 
                         }),
@@ -70,48 +70,86 @@ class Routes {
 
     }
 
-    progetti(){
+    async progetti(){
         this.init("page-progetti");
+
+        await this.db.ready;
+        const record = this.db.tables.documents[0] //record simulato
 
         const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj);
         this.main.append(s1, s2);
-        s1.id = "home-section1"
+
+        const typeDoc = record.type == "LUCE" ? "LUCE" : "GAS" 
+        const otherType = typeDoc == "LUCE" ? "GAS" : "LUCE"
+
+        const options_status_document = []
+        options_status_document.push(new Option(record.status.toUpperCase(), record.status))
+
+        options_status_document.push(...["attivo", "in scadenza", "scaduto"]
+            .filter((e:string)=> e!==record.status )
+            .map((e:string)=> new Option(e.toUpperCase(), e))
+        )
+
+        console.log(record.billing)
+
 
         new CardDetails({
             parent: s1,
-            title: "Bolletta",
+            title: "",
+            conn: async(e)=>{
+                e.preventDefault()
+                let res = await fetch("/db/documents/get")
+                console.log(await res.text())
+            },
             sections: [
                 {
-                    title: "Dettaglio", 
+                    title: "", 
                     inputs: [
                         new MyInput({
                             tag: "select",
                             label: "Tipologia",
-                            options: [new Option("LUCE", "0"), new Option("GAS", "1")],
-                        }),
-                        new MyInput({
-                            label: "Numero Bolletta",
-                        }),
-                        new MyInput({
-                            label: "Data Emissione",
-                        }),
-                        new MyInput({
-                            label: "Descrizione",
-                        }),
-                        new MyInput({
-                            label: "Durata Fornitura",
-                        }),
-                        new MyInput({
-                            label: "Totale Importo",
-                        }),
-                        new MyInput({
-                            label: "Scadenza",
+                            options: [new Option(typeDoc, typeDoc), new Option(otherType, otherType)],
                         }),
                         new MyInput({
                             tag: "select",
                             label: "Status",
-                            options: [new Option("ATTIVO", "0"),new Option("IN SCADENZA", "1"),new Option("SCADUTO", "2")],
+                            options: options_status_document,
                             props: {},
+                        }),
+                    ]
+                },
+                {
+                    title: "Dettaglio", 
+                    inputs: [
+                        new MyInput({
+                            label: "Numero Bolletta", value: record.nDocument
+                        }),
+                        new MyInput({
+                            label: "Data Emissione", value: record.issueDate
+                        }),
+                        new MyInput({
+                            label: "Descrizione", value: record.description
+                        }),
+                        new MyInput({
+                            label: "Durata Fornitura", value: record.typeProviding
+                        }),
+                        new MyInput({
+                            label: "Totale Importo", value: record.totalAmount
+                        }),
+                        new MyInput({
+                            label: "Scadenza", value: record.expirationDate
+                        }),
+                        new MyInput({
+                            label: "Consumo", value: `${record.consumption} ${record.unitOfMeasurement}`
+                        }),
+                        new MyInput({
+                            label: "Consumo Annuo", value: `${record.annualConsumption} ${record.unitOfMeasurement}`
+                        }),
+                        new MyInput({
+                            label: "Periodo Di Consumo", value: record.consumptionPeriod
+                        }),
+                        new MyInput({
+                            label: record.identificationType, value: record.identificationValue
                         }),
                     ]
                 },
@@ -121,40 +159,43 @@ class Routes {
                         new MyInput({
                             regex: /[a-zA-Z]{1,50}/,
                             label: "Nome",
-                            event:
-                                type:"blur",
-                                func: (e)=>{
-
-                                }
+                            value: record.customer.name,
                         }),
                         new MyInput({
                             regex: /[a-zA-Z]{1,50}/,
                             label: "Cognome" ,
+                            value: record.customer.surname,
                         }),
                         //TODO fare regex
                         new MyInput({
                             regex: /[a-zA-Z]/,
                             label: "Codice Fiscale" ,
+                            value: record.customer.taxId,
                         }),
                         new MyInput({
                             regex: /[a-zA-Z ]{1,100}/,
                             label: "Via",
+                            value: record.customer.address.street,
                         }),
                         new MyInput({
                             regex: /[0-9]{1,7}/,
                             label: "Civico" ,
+                            value: record.customer.address.civic,
                         }),
                         new MyInput({
                             regex: /[0-9]{5}/,
                             label: "Codice Postale" ,
+                            value: record.customer.address.zipcode,
                         }),
                         new MyInput({
                             regex: /[a-zA-Z ]{1,70}/,
                             label: "Città" ,
+                            value: record.customer.address.city,
                         }),
                         new MyInput({
                             regex: /[A-Z]{2}/,
                             label: "Provincia" ,
+                            value: record.customer.address.province,
                         }),
                     ]
                 },
@@ -162,12 +203,29 @@ class Routes {
                     title: "Fatturazione", 
                     inputs: [
                         new MyInput({
-                            regex: /[a-zA-XZ]/,
-                            label: "Luogo di fatturazione",
+                            regex: /[a-zA-Z ]{1,100}/,
+                            label: "Via",
+                            value: record.billing.address.street,
                         }),
                         new MyInput({
-                            regex: /[a-zA-XZ]/,
-                            label: "Luogo di fatturazione",
+                            regex: /[0-9]{1,7}/,
+                            label: "Civico" ,
+                            value: record.billing.address.civic,
+                        }),
+                        new MyInput({
+                            regex: /[0-9]{5}/,
+                            label: "Codice Postale" ,
+                            value: record.billing.address.zipcode,
+                        }),
+                        new MyInput({
+                            regex: /[a-zA-Z ]{1,70}/,
+                            label: "Città" ,
+                            value: record.billing.address.city,
+                        }),
+                        new MyInput({
+                            regex: /[A-Z]{2}/,
+                            label: "Provincia" ,
+                            value: record.billing.address.province,
                         }),
                     ]
                 }

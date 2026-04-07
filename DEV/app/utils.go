@@ -9,23 +9,52 @@ import (
 )
 
 //============================== TYPES TABLES ==============================
-//* customer
+type ITEM_ADDRESS struct {
+	Street string `json:"street"`
+	Civic string `json:"civic"`
+	Zipcode string `json:"zipcode"`
+	City string `json:"city"`
+	Province string `json:"province"`
+}
+type ITEM_BILLING struct {
+	Address ITEM_ADDRESS `json:"address"`
+}
 type ITEM_CUSTOMER struct {
-	Id int `json:"id"`
 	Name string `json:"name"`
 	Surname string `json:"surname"`
-	Address string `json:"address"`
+	TaxId string `json:"taxId"`
+	Address ITEM_ADDRESS `json:"address"`
+}
+//* documents
+type ITEM_DOCUMENT struct {
+	id string `json:"id"`
+	Type string `json:"type"`
+	NDocument string `json:"nDocument"`
+	IssueDate string `json:"issueDate"`
+	Description string `json:"description"`
+	TypeProviding string `json:"typeProviding"`
+	TotalAmount string `json:"totalAmount"`
+	ExpirationDate string `json:"expirationDate"`
+	Consumption string `json:"consumption"`
+	AnnualConsumption string `json:"annualConsumption"`
+	ConsumptionPeriod string `json:"consumptionPeriod"`
+	UnitOfMeasurement string `json:"unitOfMeasurement"`
+	IdentificationType string `json:"identificationType"`
+	Status string `json:"status"`
+	IdentificationValue string `json:"identificationValue"`
+	Billing ITEM_BILLING `json:"billing"`
+	Customer ITEM_CUSTOMER `json:"customer"`
 }
 //============================== METHODS ==============================
 
-func GET_CUSTOMERS() ([]ITEM_CUSTOMER, error) {
-	var customers []ITEM_CUSTOMER
-	data, err := os.ReadFile("database/customers.json")
-	if err != nil { return customers, err}
-	err = json.Unmarshal(data, &customers)
-	if err != nil {return customers, err}
+func GET_DOCUMENTS() ([]ITEM_DOCUMENT, error) {
+	var documents []ITEM_DOCUMENT
+	data, err := os.ReadFile("database/documents.json")
+	if err != nil { return documents, err}
+	err = json.Unmarshal(data, &documents)
+	if err != nil {return documents, err}
 
-	return customers, nil
+	return documents, nil
 }
 
 //============================== ROUTES ==============================
@@ -35,8 +64,8 @@ func MAIN(w http.ResponseWriter, r *http.Request) {
 }
 
 //============================== GET ==============================
-func API_CUSTOMERS_FULL(w http.ResponseWriter, r *http.Request){
-	data, err := GET_CUSTOMERS()
+func API_DOCUMENTS_FULL(w http.ResponseWriter, r *http.Request){
+	data, err := GET_DOCUMENTS()
 	if err != nil { http.Error(w, err.Error(), 500)}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(data)

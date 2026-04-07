@@ -42,6 +42,7 @@ class HandlerConnection {}
 class MyDB {
     handler = new HandlerConnection();
     tables = {
+        documents: []
     };
     ready: Promise<void>;
 
@@ -51,14 +52,14 @@ class MyDB {
 
     async init(){
         await Promise.all([
-            //await this.load({name: "storehouse"}),
+            await this.load({name: "documents"}),
         ])
     }
 
     async load(query: DBQuery){
-        //let res = await fetch(`/db/${query.name}/get`, {method:"GET"})
-        //res = await res.json();
-        //this.tables[query.name] = res;
+        let res = await fetch(`/db/${query.name}/get`, {method:"GET"})
+        res = await res.json();
+        this.tables[query.name] = res;
     }
 
 }
