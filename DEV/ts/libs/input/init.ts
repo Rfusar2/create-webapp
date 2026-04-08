@@ -12,7 +12,7 @@ type ConfigInputProps = {
     options?: HTMLOptionElement[];
     label: string;
     event?: ConfigModelInputEvent;
-    regex?: RagExp;
+    regex?: RegExp;
     choices?: ConfigInputChoices; 
     classes?: string[]
     value?: string;

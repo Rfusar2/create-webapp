@@ -85,7 +85,7 @@ class GENERATE {
 }
 
 //from api
-type Data = ItemCustomer[];
+type Data = object[];
 
 //class EXAMPLE_DATA {
 //    static customer():Data{

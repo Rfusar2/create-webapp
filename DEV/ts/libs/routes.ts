@@ -78,155 +78,25 @@ class Routes {
         const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj);
         this.main.append(s1, s2);
 
-        const typeDoc = record.type == "LUCE" ? "LUCE" : "GAS" 
-        const otherType = typeDoc == "LUCE" ? "GAS" : "LUCE"
 
-        const options_status_document = []
-        options_status_document.push(new Option(record.status.toUpperCase(), record.status))
-
-        options_status_document.push(...["attivo", "in scadenza", "scaduto"]
-            .filter((e:string)=> e!==record.status )
-            .map((e:string)=> new Option(e.toUpperCase(), e))
-        )
-
-        console.log(record.billing)
-
-
-        new CardDetails({
-            parent: s1,
-            title: "",
-            conn: async(e, inputs)=>{
-                e.preventDefault()
-                if(inputs.filter((e:MyInput)=>!e.valid).length == 0){
-                    //TODO FARE REQUEST
-
-
-                }
+        new Table({
+            e: new TAG_HTML("table").class(["table"]).obj,
+            parent: s2,
+            title: "Customer",
+            dimension: "small",
+            style: "simple",
+            tools: {n_rows: true, search:true, n_pag:false, settings:false},
+            ths: [
+                ["nDocument", "Numero Documento"],
+                ["description", "Descrizione"],
+            ],
+            conn: async()=>{
+                let res = await fetch("/db/documents/get", {method: "GET"})
+                res = await res.json()
+                console.log(res)
+                return res
             },
-            sections: [
-                {
-                    title: "", 
-                    inputs: [
-                        new MyInput({
-                            tag: "select",
-                            label: "Tipologia",
-                            options: [new Option(typeDoc, typeDoc), new Option(otherType, otherType)],
-                        }),
-                        new MyInput({
-                            tag: "select",
-                            label: "Status",
-                            options: options_status_document,
-                            props: {},
-                        }),
-                    ]
-                },
-                {
-                    title: "Dettaglio", 
-                    inputs: [
-                        new MyInput({ label: "Numero Bolletta", value: record.nDocument, regex: /^[0-9]+$/ }),
-                        new MyInput({ label: "Data Emissione", value: record.issueDate, regex: /^[0-9]{2}\/[0-9]{2}\/20[0-9]{2}$/ }),
-                        new MyInput({ label: "Descrizione", value: record.description }),
-                        new MyInput({ label: "Durata Fornitura", value: record.typeProviding }),
-                        new MyInput({ label: "Totale Importo", value: record.totalAmount }),
-                        new MyInput({ label: "Scadenza", value: record.expirationDate }),
-                        new MyInput({ label: "Consumo", value: `${record.consumption} ${record.unitOfMeasurement}` }),
-                        new MyInput({ label: "Consumo Annuo", value: `${record.annualConsumption} ${record.unitOfMeasurement}` }),
-                        new MyInput({ label: "Periodo Di Consumo", value: record.consumptionPeriod }),
-                        new MyInput({ label: record.identificationType, value: record.identificationValue }),
-                    ]
-                },
-                {
-                    title: "Anagrafica Cliente",
-                    inputs: [
-                        new MyInput({
-                            regex: /[a-zA-Z]{1,50}/,
-                            label: "Nome",
-                            value: record.customer.name,
-                        }),
-                        new MyInput({
-                            regex: /[a-zA-Z]{1,50}/,
-                            label: "Cognome" ,
-                            value: record.customer.surname,
-                        }),
-                        //TODO fare regex
-                        new MyInput({
-                            regex: /[a-zA-Z]/,
-                            label: "Codice Fiscale" ,
-                            value: record.customer.taxId,
-                        }),
-                        new MyInput({
-                            regex: /[a-zA-Z ]{1,100}/,
-                            label: "Via",
-                            value: record.customer.address.street,
-                        }),
-                        new MyInput({
-                            regex: /[0-9]{1,7}/,
-                            label: "Civico" ,
-                            value: record.customer.address.civic,
-                        }),
-                        new MyInput({
-                            regex: /[0-9]{5}/,
-                            label: "Codice Postale" ,
-                            value: record.customer.address.zipcode,
-                        }),
-                        new MyInput({
-                            regex: /[a-zA-Z ]{1,70}/,
-                            label: "Città" ,
-                            value: record.customer.address.city,
-                        }),
-                        new MyInput({
-                            regex: /[A-Z]{2}/,
-                            label: "Provincia" ,
-                            value: record.customer.address.province,
-                        }),
-                    ]
-                },
-                {
-                    title: "Fatturazione", 
-                    inputs: [
-                        new MyInput({
-                            regex: /[a-zA-Z ]{1,100}/,
-                            label: "Via",
-                            value: record.billing.address.street,
-                        }),
-                        new MyInput({
-                            regex: /[0-9]{1,7}/,
-                            label: "Civico" ,
-                            value: record.billing.address.civic,
-                        }),
-                        new MyInput({
-                            regex: /[0-9]{5}/,
-                            label: "Codice Postale" ,
-                            value: record.billing.address.zipcode,
-                        }),
-                        new MyInput({
-                            regex: /[a-zA-Z ]{1,70}/,
-                            label: "Città" ,
-                            value: record.billing.address.city,
-                        }),
-                        new MyInput({
-                            regex: /[A-Z]{2}/,
-                            label: "Provincia" ,
-                            value: record.billing.address.province,
-                        }),
-                    ]
-                }
-            ]
+            router: this,
         })
-
-
-        //new Table({
-        //    e: new TAG_HTML("table").class(["table"]).obj,
-        //    parent: s2,
-        //    title: "Customer",
-        //    dimension: "small",
-        //    style: "simple",
-        //    tools: {n_rows: true, search:true, n_pag:false, settings:false},
-        //    ths: ["id", "name"],
-        //    conn: async()=>{
-        //        let res = await fetch("/db/customers/get", {method: "GET"})
-        //        return await res.json()
-        //    }
-        //})
     }
 }

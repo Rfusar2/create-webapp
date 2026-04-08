@@ -16,13 +16,16 @@ type TableProps = {
     style: TableStyle;
     tools: SettingsTools;
     conn?: ()=>Promise<Data[]>;
-    ths: string[];
+    ths: string[][];
+    router: Routes;
 }
 type ContentTableProps = {
     settings: SettingsTools;
     parent: HTMLElement;
     width_columns?: string;
     conn?: ()=>Promise<Data[]>;
+    ths: string[][];
+    router?: Routes;
 }
 
 class SettingsTable {
@@ -166,18 +169,21 @@ class ContentTable {
         N_ROWS: "n_rows",
         SEARCH: "search",
     };
-    ths: string[];
+    ths: string[][];
+    rows: HTMLElement[] = [];
     settings: SettingsTools;
+    router: Routes;
     ready: Promise<void>;
 
-    constructor({settings, parent, width_columns, conn, ths}: ContentTableProps){
+    constructor({settings, parent, width_columns, conn, ths, router}: ContentTableProps){
         parent.append(this.obj)
         this.settings = settings;
         this.data = [];
         this.pages = [];
         this.page = [];
-        this.conn = conn
-        this.ths = ths
+        this.conn = conn;
+        this.ths = ths;
+        this.router;
 
         this.thead.setAttribute("label", "thead");
         this.tbody.setAttribute("label", "tbody");
@@ -198,16 +204,16 @@ class ContentTable {
         //*nel caso non sia settata la lunghezza delle colonne
         let style = ".row, .table-titles { grid-template-columns: " 
         const addStyle = new TAG_HTML("style").obj
-        const ths = this.ths.filter((e:string)=>e!==TAG_ID)
+        const ths = this.ths.filter((e:string[])=>e[0]!==TAG_ID)
 
         if(!width_columns){ 
             //const n_columns = Object.keys(this.data[0]).length;
             const n_columns = ths.length;
             const width_table = parent.getBoundingClientRect().width;
             const width_column = Math.floor(width_table / n_columns)-2;
-            style+= "repeat("+String(n_columns)+", "+String(width_column)+"px) }"
-        }
-        else { style+=String(width_columns)+" }"}
+            style += "repeat(" + String(n_columns) + ", " + String(width_column) + "px) }";
+}
+        else { style+=`${width_columns} }`}
         addStyle.textContent = style;
         SELECT.one("head").append(addStyle)
     }
@@ -216,8 +222,10 @@ class ContentTable {
         await this.getDBData()
         let riga = new TAG_HTML("div").class(["table-titles"]).obj;
         //for(const th_text of Object.keys(this.data[0])){
-        const ths = this.ths.filter((e:string)=>e!==TAG_ID)
-        for(const th_text of ths){
+
+        const ths = this.ths.filter((e:string[]) => e[0] !== TAG_ID);
+
+        for(const [_, th_text] of ths){
             const container_th = new TAG_HTML("div")
                 .class(["container-th"])
                 .attr({colorschema: "dark"}).obj;
@@ -233,25 +241,29 @@ class ContentTable {
         this.obj.querySelector('[label="tbody"]')!.innerHTML = "";
 
         for(let i=0; i < this.page.length; i++){
-            const record = this.page[i];
-            const riga = new TAG_HTML("div").class([i%2==0 ? "row-0" : "row-1", "row"]).obj;
-
+            const record:Data[] = this.page[i];
+            const riga = new TAG_HTML("div").class(["row", i%2==0 ? "row-0" : "row-1"]).obj;
+            this.rows.push(riga)
             for(const [k, v] of Object.entries(record)){
-                console.log(record)
                 if(k==TAG_ID){
                     riga.setAttribute("record-id", v)
                     continue
                 }
-                const container_td = new TAG_HTML("div").class(["container-td"]).attr({colorschema: "dark"}).obj;
 
-                const td = new TAG_HTML("span").props({textContent: v}).obj;
-                
+                const container_td = new TAG_HTML("div").class(["container-td"]).attr({ colorschema: "dark" }).obj;
+                const td = new TAG_HTML("span").props({ textContent: v }).obj;
                 //* HANDLER_BADGES
-                switch(k.toLowerCase()){
-                    case "status": this.fieldStatus(container_td, td);break;
-                    default:container_td.append(td);break;
+                switch (k.toLowerCase()) {
+                    case "status":
+                    case "type":
+                    case "active":
+                    case "valid":
+                        this.fieldStatus(container_td, td);
+                        break;
+                    default:
+                        container_td.append(td);
+                        break;
                 }
-
                 riga.append(container_td);
                 //* HANDLER_EMPTY_ROWS
                 //if(v=="dummy-code"){ td.style.opacity = "0"; }
@@ -320,11 +332,14 @@ class ContentTable {
     async getDBData(){ 
         if(this.conn) { 
             const data = await this.conn();
+            console.log(data)
             //*Filtro e i dati con le colonne scelte
+            const ids_column = this.ths.map((e:string[])=>e[0])
+            console.log(ids_column)
             this.data = data.map((e: object) => {
                 const filteredEntries = Object.entries(e)
-                    .filter(([key]) => this.ths.includes(key))
-                    .sort(([a], [b]) => this.ths.indexOf(a) - this.ths.indexOf(b));
+                    .filter(([key]) => ids_column.includes(key))
+                    .sort(([a], [b]) => ids_column.indexOf(a) - ids_column.indexOf(b));
                 return Object.fromEntries(filteredEntries);
             });
             return
@@ -365,7 +380,7 @@ class Table {
     footer = new FooterTable(0, 0);
 
 
-    constructor({e, parent, title, dimension, style, tools, conn, ths}:TableProps){
+    constructor({e, parent, title, dimension, style, tools, conn, ths, router}:TableProps){
         parent.append(e)
         this.obj = e;
         this.obj.setAttribute("data-colorschema", "dark")
@@ -378,15 +393,15 @@ class Table {
             parent: this.obj,
             conn: conn,
             ths: ths
+            router: router
         });
 
-        this.loadContent({style, tools, conn})
+        this.loadContent(style)
 
     }
 
-    async loadContent({style, tools, conn}: {style:TableStyle, tools: SettingsTools, conn:()=>Promise<[void, void]> | undefined}){
+    async loadContent(style:TableStyle){
         await this.table.ready
-        console.log(style)
         switch(style){
             case "paging": {
                 const N_PAGES = this.table.pages.length;
@@ -397,7 +412,6 @@ class Table {
                 break;
             }
         }
-        console.log(this.obj)
         this.set_events();
     }
 
@@ -439,6 +453,13 @@ class Table {
             }
             catch(err){console.log("Valore non valido: "+err);}
         })
+
+        //*EVENTO LINK CARTA DETTALGIO
+        for(const row of this.table.rows){
+            row.addEventListener("click", ()=>{
+                //this.table.router.document_details(row.getAttribute("record-id"))
+            })
+        }
 
         //*EVENTO SET ricerca
         this.header.input_set_search.addEventListener("input", (e)=>{

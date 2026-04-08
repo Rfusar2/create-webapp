@@ -20,4 +20,18 @@ class MyDB {
         this.tables[query.name] = res;
     }
 }
+//class EXAMPLE_DATA {
+//    static customer():Data{
+//        const data:ItemCustomer[] = [];
+//        for (let i = 0; i < 500; i++) {
+//            data.push({
+//                id: i + 1,
+//                name:    GENERATE.get(["prov1", "prova2"]),
+//                surname: GENERATE.get(["a", "b"]),
+//                address: GENERATE.get(["c", "d"])
+//            });
+//        }
+//        return {customers: data};
+//    }
+//}
 const DATABASE = new MyDB();

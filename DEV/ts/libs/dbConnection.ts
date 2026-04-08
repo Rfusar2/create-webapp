@@ -1,40 +1,8 @@
-
-type DBQuery = {
-    name: "storehouse" | "orders" | "customers";
-}
-
 type ItemCustomer = {
     id: number;
     name: string;
     surname: string;
     address: string;
-}
-type ItemOrderDetails = {
-    quantity: number;
-    product: number;
-    description: string;
-}
-type ItemOrder = {
-    id: number;
-    name: string;
-    customer: number;
-    details: ItemOrderDetails;
-}
-type ItemStoreHouseMaterial = {
-    id: number;
-    name: string;
-    free: number;
-    blocked: number;
-}
-type ItemStoreHouseProduct = {
-    id: number;
-    name: string;
-    status: string;
-    materials: ItemStoreHouseMaterial;
-}
-type StoreHouse = {
-    materials: ItemStoreHouseMaterial[];
-    products: ItemStoreHouseProduct[];
 }
 
 class HandlerConnection {}
@@ -63,5 +31,20 @@ class MyDB {
     }
 
 }
+
+//class EXAMPLE_DATA {
+//    static customer():Data{
+//        const data:ItemCustomer[] = [];
+//        for (let i = 0; i < 500; i++) {
+//            data.push({
+//                id: i + 1,
+//                name:    GENERATE.get(["prov1", "prova2"]),
+//                surname: GENERATE.get(["a", "b"]),
+//                address: GENERATE.get(["c", "d"])
+//            });
+//        }
+//        return {customers: data};
+//    }
+//}
 
 const DATABASE = new MyDB()

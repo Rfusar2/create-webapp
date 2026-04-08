@@ -15,23 +15,23 @@ func main() {
 		"aside":  FRONTEND_ASIDE_TS,
 		"cards":  FRONTEND_CARDS_SIMPLE_TS,
 		"chart":  FRONTEND_CHART_TS,
-		"models": FRONTEND_MODELS_TS,
 		"details": FRONTEND_DETAILS_TS,
-		"nav":    FRONTEND_NAV_TS,
-		"tables": FRONTEND_TABLES_TS,
-		"popup":  FRONTEND_POPUP_TS,
 		"input":  FRONTEND_INPUT_TS,
+		"models": FRONTEND_MODELS_TS,
+		"nav":    FRONTEND_NAV_TS,
+		"popup":  FRONTEND_POPUP_TS,
+		"tables": FRONTEND_TABLES_TS,
 	}
 	FRONTEND_CSS := map[string]string{
 		"aside":  FRONTEND_ASIDE_CSS,
 		"cards":  FRONTEND_CARDS_SIMPLE_CSS,
 		"chart":  FRONTEND_CHART_CSS,
 		"details": FRONTEND_DETAILS_CSS,
+		"input":  FRONTEND_INPUT_CSS,
 		"models": FRONTEND_MODELS_CSS,
 		"nav":    FRONTEND_NAV_CSS,
-		"tables": FRONTEND_TABLES_CSS,
 		"popup":  FRONTEND_POPUP_CSS,
-		"input":  FRONTEND_INPUT_CSS,
+		"tables": FRONTEND_TABLES_CSS,
 	}
 
 
@@ -40,7 +40,7 @@ func main() {
 	//"utils": FRONTEND_UTILS_TS,
 
 	re_backend := regexp.MustCompile(`--backend=(local|online)`)
-	re_project := regexp.MustCompile(`--project=([a-zA-Z0-9]+)`)
+	re_project := regexp.MustCompile(`--project=([a-zA-Z0-9-_]+)`)
 
 	for _, a := range os.Args[1:] {
 		match := re_backend.FindStringSubmatch(a)
@@ -57,6 +57,7 @@ func main() {
 
 	createTS(FRONTEND_TS)
 	createCSS(FRONTEND_CSS)
+
 	createFileCSS("home", FRONTEND_HOME_CSS)
 	createFileCSS("app", FRONTEND_APP_CSS)
 	createFileCSS("progetti", FRONTEND_PROGETTI_CSS)
