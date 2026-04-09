@@ -7,7 +7,7 @@ type SettingsTools = {
 const TAG_ID = "id"
 type TableDimension = "small" | "large";
 type TableStyle = "simple" | "paging";
-type TableFilterColumns = "storehouse" | "orders" | "customers"; //Sperimentale
+type TableFilterColumns = "storehouse" | "orders" | "customers";
 type TableProps = {
     e: HTMLElement;
     parent:HTMLElement;
@@ -167,7 +167,7 @@ class ContentTable {
     action_names = {
         N_PAG: "n_pag",
         N_ROWS: "n_rows",
-        SEARCH: "search",
+       SEARCH: "search",
     };
     ths: string[][];
     rows: HTMLElement[] = [];
@@ -277,10 +277,15 @@ class ContentTable {
         target.textContent = target.textContent.toUpperCase();
         target.style.fontSize = "10px";
         target.setAttribute("data-colorschema","dark");
-        switch(target.textContent.replaceAll(" ", "")){
-            case "ATTIVO":target.classList.add("badge-success");break;
-            case "SCADUTO":target.classList.add("badge-error");break;
-            case "INSCADENZA":target.classList.add("badge-warning");break;
+        switch(target.textContent.replaceAll(" ", "").toLowerCase()){
+            case "inlavorazione":
+            case "libero":
+                target.classList.add("badge-success");break;
+            case "finito":
+            case "bloccato":
+                target.classList.add("badge-error");break;
+            case "attesa":
+                target.classList.add("badge-warning");break;
         }
         const container_badge = new TAG_HTML("div").class(["container-badge"]).obj
         container_badge.append(target);
@@ -332,10 +337,8 @@ class ContentTable {
     async getDBData(){ 
         if(this.conn) { 
             const data = await this.conn();
-            console.log(data)
             //*Filtro e i dati con le colonne scelte
             const ids_column = this.ths.map((e:string[])=>e[0])
-            console.log(ids_column)
             this.data = data.map((e: object) => {
                 const filteredEntries = Object.entries(e)
                     .filter(([key]) => ids_column.includes(key))
