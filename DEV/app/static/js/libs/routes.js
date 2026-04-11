@@ -15,7 +15,7 @@ class Routes {
         await this.db.refresh();
         setInterval(this.db.refresh, this.intervalPolling);
     }
-    async home() {
+    async testasyncvalue() {
         this.init("page-home");
         await this.loadDB();
         const [s1, s2] = ["section", "section"].map((e) => new TAG_HTML(e).obj);
@@ -30,7 +30,7 @@ class Routes {
             this.render.update("testo", String(text));
         }, this.intervalPolling);
     }
-    async progetti() {
+    async testasynctable() {
         this.init("page-progetti");
         await this.loadDB();
         const table = new Table({
@@ -45,14 +45,30 @@ class Routes {
                 ["name", "NOME"],
             ],
             conn: async () => {
-                await this.db.load("example");
                 return this.db.tables.example;
             }
         });
         setInterval(async () => {
+            console.log(this.db);
             await this.db.load("example");
             table.table.data = this.db.tables.example;
             table.table.setContent(false, { name: "n_pag", value: String(0) });
         }, this.intervalPolling);
+    }
+    async testmodelupdate1() {
+        this.init("page-one-element");
+        new Model({
+            type: "center",
+            custom: async (model) => {
+            }
+        });
+    }
+    async testmodelupdate2() {
+        this.init("page-one-element");
+        new Model({
+            type: "center",
+            custom: async (model) => {
+            }
+        });
     }
 }

@@ -16,7 +16,7 @@ class Routes {
         setInterval(this.db.refresh, this.intervalPolling);
     }
 
-    async home(){
+    async testasyncvalue(){
         this.init("page-home");
         await this.loadDB()
 
@@ -36,7 +36,7 @@ class Routes {
         }, this.intervalPolling);
     }
     
-    async progetti(){
+    async testasynctable(){
         this.init("page-progetti");
         await this.loadDB()
 
@@ -52,16 +52,36 @@ class Routes {
                 ["name", "NOME"],
             ],
             conn: async ()=>{
-                await this.db.load("example");
                 return this.db.tables.example;
             }
         })
 
         setInterval(async ()=>{
+            console.log(this.db)
             await this.db.load("example")
             table.table.data = this.db.tables.example
             table.table.setContent(false, {name: "n_pag", value: String(0)});
 
         }, this.intervalPolling);
+    }
+
+    async testmodelupdate1(){
+        this.init("page-one-element")
+
+        new Model({
+            type: "center",
+            custom: async(model){
+            }
+        })
+
+    }
+    async testmodelupdate2(){
+        this.init("page-one-element")
+        new Model({
+            type: "center",
+            custom: async(model){
+            }
+        })
+
     }
 }

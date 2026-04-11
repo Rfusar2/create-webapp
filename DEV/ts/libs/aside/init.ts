@@ -7,8 +7,10 @@ type AsideItem = {
 }
 
 const LINKS_ASIDE: AsideItem[] = [
-    {text: "Dashboard", href: "#",},
-    {text: "Progetti", href: "#",},
+    {text: "Test Async Value", href: "#",},
+    {text: "Test Async Table", href: "#",},
+    {text: "Test Model update 1", href: "#",},
+    {text: "Test Model update 2", href: "#",},
 ] 
 
 

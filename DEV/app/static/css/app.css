@@ -68,7 +68,7 @@ body {
 }
 
 /* CONFIG PAGES */
-.page-documents, .page-models {
+.page-one-element {
     display: flex;
     justify-content: center;
 }
