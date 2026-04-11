@@ -68,6 +68,12 @@ class Routes {
     async testmodelupdate(){
         this.init("page-one-element")
 
+        const style = {
+            border: "1px solid #fff2",
+            width: "80%",
+            height: "100%",
+        }
+
         const [btn1, btn2, btn3, btn4] = [
             ["button", "model-large"], 
             ["button", "model-medium"],
@@ -79,32 +85,56 @@ class Routes {
         btn1.addEventListener("click", ()=>{
             new Model({
                 type: "center",
+                title: "MODELLO LARGE",
                 dimension: "large",
-                custom: async(model){
+                custom: async (model)=>{
+                    const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj)
+                    model.main.append(s1, s2)
+
+                    Object.assign(s1.style, style)
+                    Object.assign(s2.style, style)
                 }
             })
         })
         btn2.addEventListener("click", ()=>{
             new Model({
                 type: "center",
+                title: "MODELLO MEDIUM",
                 dimension: "medium",
-                custom: async(model){
+                custom: async(model)=>{
+                    const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj)
+                    model.main.append(s1, s2)
+
+                    Object.assign(s1.style, style)
+                    Object.assign(s2.style, style)
                 }
             })
         })
         btn3.addEventListener("click", ()=>{
             new Model({
                 type: "center",
+                title: "MODELLO SMALL",
                 dimension: "small",
-                custom: async(model){
+                custom: async(model)=>{
+                    const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj)
+                    model.main.append(s1)
+
+                    Object.assign(s1.style, style)
+                    Object.assign(s2.style, style)
                 }
             })
         })
         btn4.addEventListener("click", ()=>{
             new Model({
                 type: "right",
+                title: "MODELLO RIGHT",
                 dimension: "small",
-                custom: async(model){
+                custom: async(model)=>{
+                    const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj)
+                    model.main.append(s1, s2)
+
+                    Object.assign(s1.style, style)
+                    Object.assign(s2.style, style)
                 }
             })
         })

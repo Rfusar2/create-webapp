@@ -25,11 +25,24 @@ class MyInput {
     label: HTMLElement;
 
     constructor({props, tag, options, label, event, regex, choices, classes, value}:ConfigModelInputProps){
-        this.tag = tag ? tag : "input"
-        this.input = new TAG_HTML(this.tag).class(["input"]).obj
         this.label = new TAG_HTML("label").class(["label"]).props({textContent: label}).obj
+
+        if (tag == "file"){
+            this.input = new TAG_HTML("file").class(["input-file"]).obj
+            const container = new TAG_HTML("div").class(["container-input-file"]).obj
+            container.append(
+                this.input,
+                new TAG_HTML("i").class(["fa-regular", "fa-file"]).obj
+            )
+            this.obj.append(this.label, container)
+        }
+        else {
+            this.tag = tag ? tag : "input"
+            this.input = new TAG_HTML(this.tag).class(["input"]).obj
+            this.obj.append(this.label, this.input)
+
+        }
         this.obj.classList.add(`container-${this.tag}`)
-        this.obj.append(this.label, this.input)
         this.input.value = value ? value : ""
         this.valid = true
 
@@ -75,9 +88,9 @@ class MyInput {
         this.input.append(...options)
     }
 
-    //labelEvent(){
-    //    this.input.addEventListener("focus", ()=> this.label.style.transform = "scale(80%)")
-    //    this.input.addEventListener("blur", ()=> this.label.style.transform = "scale(100%)")
+    labelEvent(){
+        this.input.addEventListener("focus", ()=> this.label.style.transform = "scale(80%)")
+        this.input.addEventListener("blur", ()=> this.label.style.transform = "scale(100%)")
 
-    //}
+    }
 }

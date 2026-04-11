@@ -27,7 +27,7 @@
 #model {
     background: var(--bg-card);
     display: grid;
-    grid-template-rows: 20% 60% 20%;
+    grid-template-rows: 20% 70% 10%;
 }
 
 
@@ -55,7 +55,6 @@
     width: 100%;
     display: flex;
     justify-content: end;
-    padding-right: 20px;
 }
 
 #model-container-btns{
@@ -65,8 +64,6 @@
     height: 40px;
     gap: 20px;
 }
-#model-container-btns.center { right: 15px; }
-#model-container-btns.right { left: 15px; }
 
 .model-input-box > input {
     color: var(--color-text);
@@ -87,6 +84,18 @@
 #sfondo-model.right {
     display: grid;
     grid-template-columns: 70% 30%;
+}
+
+#model.small > main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#model.right #model-container-btns { 
+    display: flex;
+    flex-direction: row;
+    left: 15px; 
 }
 
 #model.right {
@@ -114,6 +123,11 @@
 #container-model.center {
     width: 100vw;
     height: 100vh;
+
+}
+
+#model.center #model-container-btns { 
+    right: 15px; 
 }
 
 #model.center {
@@ -125,7 +139,6 @@
 
 
 #model.center  > main {
-    display: grid;
-    grid-template-columns: 33% 34% 33%;
+    grid-template-rows: 50% 50%;
 }
 

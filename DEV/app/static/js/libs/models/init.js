@@ -5,7 +5,7 @@ class Model {
         this.eInputs = [];
         this.inputs = [];
         this.header = new TAG_HTML("header").obj;
-        this.container_inputs = new TAG_HTML("main").obj;
+        this.main = new TAG_HTML("main").obj;
         this.footer = new TAG_HTML("footer").obj;
         this.btn_close = new TAG_HTML("button").id("btn-close").class(["btn", "btn-primary"]).props({ textContent: "Cancella" }).obj;
         this.btn_send = new TAG_HTML("button").id("btn-send").class(["btn", "btn-success"]).props({ textContent: "Conferma" }).obj;
@@ -15,7 +15,7 @@ class Model {
         this.container = new TAG_HTML("form").id("container-model").class([type]).obj;
         this.obj = new TAG_HTML("div").id("model").class([type, dimension]).obj;
         this.container.append(this.obj);
-        this.obj.append(this.header, this.container_inputs, this.footer);
+        this.obj.append(this.header, this.main, this.footer);
         //LAYOUT
         switch (type) {
             case "right":
@@ -50,7 +50,7 @@ class Model {
         const boxies = [];
         for (let i = 0; i < this.max_inputs; i++) {
             const box = new TAG_HTML("div").class(["model-input-box"]).obj;
-            this.container_inputs.append(box);
+            this.main.append(box);
             boxies.push(box);
         }
         for (let i = 0; i < this.inputs.length; i++) {
