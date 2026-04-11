@@ -3,27 +3,23 @@ class HandlerConnection {
         {id: "example", url: "/db/example/get"},
     ];
 
-    async refresh(id:string, tables:object){
-        for(const endpoint of this.GET){
-            if(id == endpoint.id){
-                let res = await fetch(endpoint.url, { method: "GET" });
-                res = res.status == 200 ? await res.json() : await res.text();
-                //console.log("BEFORE", tables);
-                tables[id] = res;
-                //console.log("AFTER", tables);
-            }
-        }
-    }
+    async refresh(id: string, tables: Record<string, any>){
+        const endpoint = this.GET.find(e => e.id == id);
+        if (!endpoint) return;
+
+        const res = await fetch(endpoint.url);
+        tables[id] = res.ok ? await res.json() : await res.text();
+    };
 }
 
 
 class MyDB {
     handler = new HandlerConnection();
     ready: Promise<void>;
-    tables = {};
+    tables: Record<string, any> = {};
 
     async load(queryName: string){
-        await this.handler.refresh(querName, this.tables);
+        await this.handler.refresh(queryName, this.tables);
     }
 
     async refresh(){

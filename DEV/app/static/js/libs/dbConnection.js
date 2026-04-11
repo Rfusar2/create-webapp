@@ -6,16 +6,13 @@ class HandlerConnection {
         ];
     }
     async refresh(id, tables) {
-        for (const endpoint of this.GET) {
-            if (id == endpoint.id) {
-                let res = await fetch(endpoint.url, { method: "GET" });
-                res = res.status == 200 ? await res.json() : await res.text();
-                //console.log("BEFORE", tables);
-                tables[id] = res;
-                //console.log("AFTER", tables);
-            }
-        }
+        const endpoint = this.GET.find(e => e.id == id);
+        if (!endpoint)
+            return;
+        const res = await fetch(endpoint.url);
+        tables[id] = res.ok ? await res.json() : await res.text();
     }
+    ;
 }
 class MyDB {
     constructor() {
@@ -23,7 +20,7 @@ class MyDB {
         this.tables = {};
     }
     async load(queryName) {
-        await this.handler.refresh(querName, this.tables);
+        await this.handler.refresh(queryName, this.tables);
     }
     async refresh() {
         for (const e of this.handler.GET) {
