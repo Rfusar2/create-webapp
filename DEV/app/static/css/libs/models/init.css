@@ -12,7 +12,7 @@
     to   { opacity: 1; }
 }
 
-.sfondo-model {
+#sfondo-model {
     position: fixed;
     inset: 0;
     z-index: 2147483647;
@@ -32,6 +32,7 @@
 
 
 #model > header {
+    position:relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -43,12 +44,29 @@
 }
 
 #model > main {
-    width: 85%;
+    width: 100%;
     display: flex;
-    gap: 30px;
-    flex-direction: column;
-    padding: 20px 0px 0px 20px;
+    justify-content: center;
+    align-items: center;
 }
+
+#model > footer {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    padding-right: 20px;
+}
+
+#model-container-btns{
+    position: absolute;
+    top: 15px;
+    display: grid;
+    height: 40px;
+    gap: 20px;
+}
+#model-container-btns.center { right: 15px; }
+#model-container-btns.right { left: 15px; }
 
 .model-input-box > input {
     color: var(--color-text);
@@ -59,48 +77,46 @@
     padding: 5px;
 }
 
-#model > footer {
-    position: relative;
-    width: 85%;
-}
+/*MODEL DIMENSION*/
+#model.small { width: 40%; height: 40%;}
+#model.medium { width: 65%; height: 65%;}
+#model.large { width: 90%; height: 90%;}
 
 
 /*MODEL RIGHT*/
-#model.right {
+#sfondo-model.right {
     display: grid;
     grid-template-columns: 70% 30%;
 }
 
 #model.right {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-card);
     transform: translateX(100%);
     border-left: 1px solid #fff2;
     animation: model-right 500ms ease forwards;
 }
-
-#model-container-btns.right{
-    display: grid;
-    grid-template-columns: 50% 50%;
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-    height: 40px;
-    gap: 30px;
-    padding: 20px;
+#container-model.right {
+    width: 100vw;
+    height: 100vh;
 }
 
+
 /*MODEL CENTER*/
-#sfondo-model-center {
+#sfondo-model.center, #container-model.center {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+#container-model.center {
+    width: 100vw;
+    height: 100vh;
+}
+
 #model.center {
-    width: 750px;
-    height: 400px;
     animation: model-center 500ms ease forwards;
     border: 1px solid #fff2;
     box-shadow: 2px 4px 6px #0004;
@@ -113,13 +129,3 @@
     grid-template-columns: 33% 34% 33%;
 }
 
-#model-container-btns.center{
-    display: grid;
-    grid-template-columns: 50% 50%;
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-    height: 40px;
-    gap: 30px;
-    padding: 20px;
-}

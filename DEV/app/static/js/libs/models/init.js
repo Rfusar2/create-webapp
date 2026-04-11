@@ -2,9 +2,6 @@
 class Model {
     constructor({ send, type, dimension, title, inputs, load, custom }) {
         this.max_inputs = 9; //da rivedere
-        this.background = new TAG_HTML("div").id("sfondo-model-" + this._type).class(["sfondo-model"]).obj;
-        this.container = new TAG_HTML("form").id("container-model").obj;
-        this.obj = new TAG_HTML("div").id("model-" + this._type).class(["model"]).obj;
         this.eInputs = [];
         this.inputs = [];
         this.header = new TAG_HTML("header").obj;
@@ -14,9 +11,9 @@ class Model {
         this.btn_send = new TAG_HTML("button").id("btn-send").class(["btn", "btn-success"]).props({ textContent: "Conferma" }).obj;
         this.send = send;
         this.inputs = inputs;
-        this.background = new TAG_HTML("div").id(`sfondo-model-${type}`).class(["sfondo-model"]).obj;
+        this.background = new TAG_HTML("div").id(`sfondo-model`).class([type]).obj;
+        this.container = new TAG_HTML("form").id("container-model").class([type]).obj;
         this.obj = new TAG_HTML("div").id("model").class([type, dimension]).obj;
-        this.background.append(this.container);
         this.container.append(this.obj);
         this.obj.append(this.header, this.container_inputs, this.footer);
         //LAYOUT
@@ -26,18 +23,24 @@ class Model {
                 break;
             case "center": break;
         }
+        this.background.append(this.container);
         this.header.append(new TAG_HTML("h1").props({ textContent: title }).obj);
-        let container_btns_class = "custom";
         if (custom) {
             custom(this);
         }
         else {
             this.loadInputs();
-            container_btns_class = type;
         }
-        const container = new TAG_HTML("div").id("model-container-btns").class([container_btns_class]).obj;
-        container.append(this.btn_close, this.btn_send);
-        this.footer.append(container);
+        const container = new TAG_HTML("div").id("model-container-btns").class([type]).obj;
+        container.append(this.btn_send, this.btn_close);
+        switch (type) {
+            case "center":
+                this.header.append(container);
+                break;
+            case "right":
+                this.footer.append(container);
+                break;
+        }
         document.body.prepend(this.background);
         this.getEvents();
         this.obj.addEventListener("load", this.load);

@@ -2,8 +2,7 @@
 const LINKS_ASIDE = [
     { text: "Test Async Value", href: "#", },
     { text: "Test Async Table", href: "#", },
-    { text: "Test Model update 1", href: "#", },
-    { text: "Test Model update 2", href: "#", },
+    { text: "Test Model update ", href: "#", },
 ];
 class Sidebar {
     constructor() {

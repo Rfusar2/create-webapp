@@ -55,20 +55,46 @@ class Routes {
             table.table.setContent(false, { name: "n_pag", value: String(0) });
         }, this.intervalPolling);
     }
-    async testmodelupdate1() {
+    async testmodelupdate() {
         this.init("page-one-element");
-        new Model({
-            type: "center",
-            custom: async (model) => {
-            }
+        const [btn1, btn2, btn3, btn4] = [
+            ["button", "model-large"],
+            ["button", "model-medium"],
+            ["button", "model-small"],
+            ["button", "model-right"],
+        ].map((e) => new TAG_HTML(e[0]).class(["btn", "btn-primary"]).props({ textContent: e[1] }).obj);
+        this.main.append(btn1, btn2, btn3, btn4);
+        btn1.addEventListener("click", () => {
+            new Model({
+                type: "center",
+                dimension: "large",
+                custom: async (model) => {
+                }
+            });
         });
-    }
-    async testmodelupdate2() {
-        this.init("page-one-element");
-        new Model({
-            type: "center",
-            custom: async (model) => {
-            }
+        btn2.addEventListener("click", () => {
+            new Model({
+                type: "center",
+                dimension: "medium",
+                custom: async (model) => {
+                }
+            });
+        });
+        btn3.addEventListener("click", () => {
+            new Model({
+                type: "center",
+                dimension: "small",
+                custom: async (model) => {
+                }
+            });
+        });
+        btn4.addEventListener("click", () => {
+            new Model({
+                type: "right",
+                dimension: "small",
+                custom: async (model) => {
+                }
+            });
         });
     }
 }
