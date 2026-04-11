@@ -194,14 +194,16 @@ class ContentTable {
         target.textContent = target.textContent.toUpperCase();
         target.style.fontSize = "10px";
         target.setAttribute("data-colorschema", "dark");
-        switch (target.textContent.replaceAll(" ", "")) {
-            case "ATTIVO":
+        switch (target.textContent.replaceAll(" ", "").toLowerCase()) {
+            case "inlavorazione":
+            case "libero":
                 target.classList.add("badge-success");
                 break;
-            case "SCADUTO":
+            case "finito":
+            case "bloccato":
                 target.classList.add("badge-error");
                 break;
-            case "INSCADENZA":
+            case "attesa":
                 target.classList.add("badge-warning");
                 break;
         }
@@ -254,10 +256,8 @@ class ContentTable {
     async getDBData() {
         if (this.conn) {
             const data = await this.conn();
-            console.log(data);
             //*Filtro e i dati con le colonne scelte
             const ids_column = this.ths.map((e) => e[0]);
-            console.log(ids_column);
             this.data = data.map((e) => {
                 const filteredEntries = Object.entries(e)
                     .filter(([key]) => ids_column.includes(key))

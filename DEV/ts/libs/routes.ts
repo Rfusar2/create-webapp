@@ -1,6 +1,7 @@
 class Routes {
     main = SELECT.one("#page");
     db = DATABASE
+    render = RENDER
 
     init(_class: string){
         this.main.className = "";
@@ -8,95 +9,27 @@ class Routes {
         this.main.classList.add(_class);
     }
 
-    async dashboard(){
+    async home(){
         this.init("page-listino");
+
+        let text = 0;
+        const span = new TAG_HTML("span").props({textContent: String(text)}).obj
+        this.render.add({ id:"testo",  element: span });
+
+        setInterval(async ()=>{
+            await this.db.refresh();
+            text = this.db.tables.example.length;
+            this.render.update("testo", String(text))
+            console.log("ho eseguito l'aggiornamento")
+
+        }, 5 * 1000);
+
         const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj);
         this.main.append(s1, s2);
         s1.id = "home-section1"
 
-        //*QUERY DB
-        await this.db.ready;
+        const btn = new TAG_HTML("button").props({textContent: "cambia il valore"}).class(["btn", "btn-success"]).obj;
+        s1.append(btn, span);
 
-        const cards = [
-            {
-                title: "test1",
-                content: "5",
-                router: "progetti"
-            },
-            {
-                title: "test2",
-                content: "9",
-                form: {
-                    model: ConfigModelTypes.CENTER,
-                    inputs: [
-                        new MyInput({
-                            tag: "select",
-                            label: "Customer",
-                            props: {name: "customer-name"},
-                            choices: {
-                                conn: async ()=>{
-                                    let res = await fetch("/db/documents/get", {method:"GET"})
-                                    return await res.json()
-                                },
-                                name_column: "nDocuments"
-                            }
-
-                        }),
-                        new MyInput({
-                            props: {placeholder: "Name", name: "customer-name"},
-                            regex: /[0-9]/,
-                        }),
-                    ]
-                }
-            }
-        ]
-
-        //TO SCREEN
-        for(const card of cards){
-            new Card({
-                parent: s1,
-                title: card.title,
-                style: ConfigCardStyle.PRIMARY,
-                content: card.content,
-                view: true,
-                router: card.router,
-                form: card.form,
-            })
-
-        }
-
-
-
-    }
-
-    async progetti(){
-        this.init("page-progetti");
-
-        await this.db.ready;
-        const record = this.db.tables.documents[0] //record simulato
-
-        const [s1, s2] = ["section", "section"].map((e:string)=>new TAG_HTML(e).obj);
-        this.main.append(s1, s2);
-
-
-        new Table({
-            e: new TAG_HTML("table").class(["table"]).obj,
-            parent: s2,
-            title: "Customer",
-            dimension: "small",
-            style: "simple",
-            tools: {n_rows: true, search:true, n_pag:false, settings:false},
-            ths: [
-                ["nDocument", "Numero Documento"],
-                ["description", "Descrizione"],
-            ],
-            conn: async()=>{
-                let res = await fetch("/db/documents/get", {method: "GET"})
-                res = await res.json()
-                console.log(res)
-                return res
-            },
-            router: this,
-        })
     }
 }

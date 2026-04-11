@@ -1,37 +1,35 @@
 "use strict";
 class HandlerConnection {
+    constructor() {
+        this.GET = [
+            { id: "example", url: "/db/example/get" },
+        ];
+    }
+    async refresh(id, tables) {
+        for (const endpoint of this.GET) {
+            if (id == endpoint.id) {
+                let res = await fetch(endpoint.url, { method: "GET" });
+                res = res.status == 200 ? await res.json() : await res.text();
+                //console.log("BEFORE", tables);
+                tables[id] = res;
+                //console.log("AFTER", tables);
+            }
+        }
+    }
 }
 class MyDB {
     constructor() {
         this.handler = new HandlerConnection();
-        this.tables = {
-            documents: []
-        };
-        this.ready = this.init();
+        this.tables = {};
     }
-    async init() {
-        await Promise.all([
-            await this.load({ name: "documents" }),
-        ]);
+    async load(queryName) {
+        await this.handler.refresh(querName, this.tables);
     }
-    async load(query) {
-        let res = await fetch(`/db/${query.name}/get`, { method: "GET" });
-        res = await res.json();
-        this.tables[query.name] = res;
+    async refresh() {
+        for (const e of this.handler.GET) {
+            await this.handler.refresh(e.id, this.tables);
+        }
     }
 }
-//class EXAMPLE_DATA {
-//    static customer():Data{
-//        const data:ItemCustomer[] = [];
-//        for (let i = 0; i < 500; i++) {
-//            data.push({
-//                id: i + 1,
-//                name:    GENERATE.get(["prov1", "prova2"]),
-//                surname: GENERATE.get(["a", "b"]),
-//                address: GENERATE.get(["c", "d"])
-//            });
-//        }
-//        return {customers: data};
-//    }
-//}
 const DATABASE = new MyDB();
+//setInterval(DATABASE.refresh, 10 * 1000)
