@@ -27,14 +27,28 @@ class MyInput {
     constructor({props, tag, options, label, event, regex, choices, classes, value}:ConfigModelInputProps){
         this.label = new TAG_HTML("label").class(["label"]).props({textContent: label}).obj
 
-        if (tag == "file"){
-            this.input = new TAG_HTML("file").class(["input-file"]).obj
-            const container = new TAG_HTML("div").class(["container-input-file"]).obj
-            container.append(
-                this.input,
-                new TAG_HTML("i").class(["fa-regular", "fa-file"]).obj
-            )
-            this.obj.append(this.label, container)
+        if (["loadfile", "savefile"].includes(tag)){
+
+            if(tag == "loadfile"){
+                this.input = new TAG_HTML("input").props({type: "file"}).class(["input-file"]).obj
+            }
+            else {
+                this.input = new TAG_HTML("input").props({type: "text"}).class(["input-file"]).obj
+
+            }
+            const section = new TAG_HTML("div").class(["container-input-file"]).obj
+            const container = new TAG_HTML("div").class(["btn", "btn-primary"]).obj
+
+            container.append(new TAG_HTML("i").class(["fa-regular", "fa-file"]).obj)
+            if(tag=="loadfile"){ container.append(this.input) }
+            container.append(this.label)
+            
+            section.append(container)
+            this.obj.append(section)
+
+            if(tag == "loadfile"){
+                container.addEventListener("click", ()=>this.input.click())
+            }
         }
         else {
             this.tag = tag ? tag : "input"

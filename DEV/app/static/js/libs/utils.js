@@ -70,6 +70,7 @@ class GENERATE {
         return Array.from(array, n => chars[n % chars.length]).join('');
     }
 }
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 //class EXAMPLE_DATA {
 //    static customer():Data{
 //        const data:ItemCustomer[] = [];

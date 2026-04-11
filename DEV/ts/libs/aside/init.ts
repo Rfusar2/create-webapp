@@ -10,6 +10,7 @@ const LINKS_ASIDE: AsideItem[] = [
     {text: "Test Async Value", href: "#",},
     {text: "Test Async Table", href: "#",},
     {text: "Test Model update ", href: "#",},
+    {text: "Play with input", href: "#",},
 ] 
 
 

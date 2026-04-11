@@ -1,9 +1,4 @@
 "use strict";
-var ConfigPopupStatus;
-(function (ConfigPopupStatus) {
-    ConfigPopupStatus[ConfigPopupStatus["OK"] = 0] = "OK";
-    ConfigPopupStatus[ConfigPopupStatus["KO"] = 1] = "KO";
-})(ConfigPopupStatus || (ConfigPopupStatus = {}));
 class ConfigPopup {
     constructor({ type, text, status }) {
         this.type = type;
@@ -20,10 +15,10 @@ class Popup {
             .class(["popup"]).obj;
         const span = new TAG_HTML("span").obj;
         switch (this.settings.status) {
-            case ConfigPopupStatus.OK:
+            case 0:
                 span.id = "popup-message-ok";
                 break;
-            case ConfigPopupStatus.KO:
+            case 1:
                 span.id = "popup-message-ko";
                 break;
         }

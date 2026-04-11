@@ -83,6 +83,7 @@ class GENERATE {
         return Array.from(array, n => chars[n % chars.length]).join('');
     }
 }
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 //from api
 type Data = object[];

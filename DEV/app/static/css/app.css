@@ -72,6 +72,9 @@ body {
     display: flex;
     justify-content: center;
 }
+.page-full {
+    height: calc(100vh - 80px);
+}
 
 
 /* Buttons */
@@ -86,3 +89,18 @@ body {
 .btn-error:hover {background: var(--error); color: #fff}
 .btn-success:hover {background: var(--get-pro); color: #fff}
 .btn-warning:hover {background: var(--yellow-text); color: #fff}
+
+
+/* Spinner */
+@keyframes spin {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+}
+
+.spinner {
+    border: 5px solid #fff1;
+    border-radius: 20px;
+    animation: spin 1s infinite linear;
+    width: 30px;
+    height: 30px;
+}

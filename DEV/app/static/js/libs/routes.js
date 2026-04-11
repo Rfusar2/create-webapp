@@ -122,4 +122,8 @@ class Routes {
             });
         });
     }
+    async playwithinput() {
+        this.init("page-full");
+        new UserPromptPage(this.main);
+    }
 }

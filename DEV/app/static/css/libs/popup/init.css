@@ -1,11 +1,11 @@
 
 @keyframes view {
-    from{opacity: 0; transform: translateY(0%);} 
-    to {opacity: 1; transform: translateY(10%);}
+    from{opacity: 0; transform: translateX(10%);} 
+    to {opacity: 1; transform: translateX(0%);}
 }
 @keyframes disable {
-    from{opacity: 1; transform: translateY(10%);} 
-    to {opacity: 0; transform: translateY(0%);}
+    from{opacity: 1; transform: translateX(0%);} 
+    to {opacity: 0; transform: translateX(10%);}
 }
 
 :root{
@@ -17,18 +17,16 @@
     z-index: 2147483647;
 }
 .popup{
-    width: 250px;
-    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     background: var(--bg-card);
     color: var(--color-text);
     border: 1px solid #fff2;
-    box-shadow: 2px 4px 6px #0002;
+    box-shadow: 2px 4px 6px #0005;
 
     border-radius: 5px;
-    padding: 30px;
+    padding: 20px;
     animation: 
         view 300ms linear forwards, 
         disable 300ms var(--delay) linear forwards;

@@ -1,19 +1,13 @@
-
-enum ConfigPopupStatus {
-    OK,
-    KO
-}
-
 type ConfigPopupProps = {
     type: "left" | "right";
     text: string;
-    status: ConfigPopupStatus;
+    status: number;
 }
 
 class ConfigPopup {
     type: string;
     text: string;
-    status: ConfigPopupStatus;
+    status: number;
 
     constructor({ type, text, status }: ConfigPopupProps) {
         this.type = type;
@@ -37,8 +31,8 @@ class Popup {
         const span = new TAG_HTML("span").obj;
 
         switch(this.settings.status){
-            case ConfigPopupStatus.OK: span.id = "popup-message-ok"; break;
-            case ConfigPopupStatus.KO: span.id = "popup-message-ko"; break;
+            case 0: span.id = "popup-message-ok"; break;
+            case 1: span.id = "popup-message-ko"; break;
         }
 
         span.textContent = this.settings.text;
