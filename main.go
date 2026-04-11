@@ -65,6 +65,7 @@ func main() {
 	createFileTS("dbConnection", FRONTEND_DBCONNECTION_TS)
 	createFileTS("routes", FRONTEND_ROUTES_TS)
 	createFileTS("utils", FRONTEND_UTILS_TS)
+	createFileTS("render", FRONTEND_UTILS_TS)
 	
 	createFile("package.json", PACKAGEJSON)
 	createFile("tsconfig.json", TSCONFIG)

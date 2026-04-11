@@ -33,6 +33,7 @@ func main(){
 	createVAR("FRONTEND_DBCONNECTION_TS", filepath.Join(WORKDIR_TS_LIBS, "dbConnection.ts"), &content_file)
 	createVAR("FRONTEND_ROUTES_TS", filepath.Join(WORKDIR_TS_LIBS, "routes.ts"), &content_file)
 	createVAR("FRONTEND_UTILS_TS", filepath.Join(WORKDIR_TS_LIBS, "utils.ts"), &content_file)
+	createVAR("FRONTEND_RENDER_TS", filepath.Join(WORKDIR_TS_LIBS, "render.ts"), &content_file)
 
 	//CSS
 	createVAR("FRONTEND_ASIDE_CSS", filepath.Join(WORKDIR_CSS_LIBS, "aside", "init.css"), &content_file)
