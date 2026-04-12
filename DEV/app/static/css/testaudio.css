@@ -1,0 +1,31 @@
+.page-audio .s2-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.page-audio .s1 {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.page-audio {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.page-audio .row {
+    display: grid;
+    grid-template-columns: 80% 20%;
+    gap: 20px;
+}
+
+.page-audio .row .range {
+    width: 100%;
+}
+
+.page-audio .row .d2 {
+    display: flex;
+    justify-content: center;
+}

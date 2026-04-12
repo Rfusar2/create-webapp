@@ -33,6 +33,10 @@ func main() {
 		"popup":  FRONTEND_POPUP_CSS,
 		"tables": FRONTEND_TABLES_CSS,
 	}
+	FRONTEND_PAGS_TS := map[string]string{
+		"testAudio":  FRONTEND_PAGS_TESTAUDIO_TS,
+		"userPrompt":  FRONTEND_PAGS_USERPROMPT_TS,
+	}
 
 
 	//"dbConnection": FRONTEND_DBCONNECTION_TS,
@@ -57,10 +61,13 @@ func main() {
 
 	createTS(FRONTEND_TS)
 	createCSS(FRONTEND_CSS)
+	
+	createTSPAGE(FRONTEND_PAGS_TS)
 
 	createFileCSS("home", FRONTEND_HOME_CSS)
 	createFileCSS("app", FRONTEND_APP_CSS)
 	createFileCSS("progetti", FRONTEND_PROGETTI_CSS)
+	createFileCSS("testaudio", FRONTEND_PAGS_TESTAUDIO_CSS)
 
 	createFileTS("dbConnection", FRONTEND_DBCONNECTION_TS)
 	createFileTS("routes", FRONTEND_ROUTES_TS)
@@ -124,6 +131,16 @@ func createCSS(frontend map[string]string){
 		os.MkdirAll(filepath.Join(project, "app", "static", "css", "libs", name), 0755)
 		os.WriteFile(
 			filepath.Join(project, "app", "static", "css", "libs", name, "init.css"), 
+			[]byte(file_content),
+			0644,
+		)
+	}
+}
+func createTSPAGE(frontend map[string]string){
+	for name, file_content := range frontend {
+		os.MkdirAll(filepath.Join(project, "ts", "libs", "pags"), 0755)
+		os.WriteFile(
+			filepath.Join(project, "ts", "libs", "pags", name+".ts"), 
 			[]byte(file_content),
 			0644,
 		)
