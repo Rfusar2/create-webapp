@@ -4,6 +4,7 @@ const LINKS_ASIDE = [
     { text: "Test Async Table", href: "#", },
     { text: "Test Model update ", href: "#", },
     { text: "Play with input", href: "#", },
+    { text: "Test Audio", href: "#", },
 ];
 class Sidebar {
     constructor() {

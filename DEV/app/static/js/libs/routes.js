@@ -126,4 +126,72 @@ class Routes {
         this.init("page-full");
         new UserPromptPage(this.main);
     }
+    async testaudio() {
+        this.init("page-full");
+        //BASE
+        //const container = new TAG_HTML("div").class(["card-container"]).obj;
+        //const audio = new TAG_HTML("audio").props({controls:true}).obj;
+        //const source = new TAG_HTML("source").props({type:"audio/mpeg", src:"static/etc/idea8.mp3.mpeg"}).obj;
+        //audio.append(source);
+        //container.append(audio);
+        //this.main.append(container);
+        const [s1, s2] = ["section", "section"].map((e) => new TAG_HTML(e).obj);
+        this.main.append(s1, s2);
+        const createRow = () => {
+            const box = new TAG_HTML("div").obj;
+            Object.assign(box.style, {
+                display: "flex",
+                flexDircetion: "column",
+                gap: "20px"
+            });
+            const [d1, d2] = ["div", "div"].map((e) => new TAG_HTML(e).obj);
+            const audio = new TAG_HTML("audio").props({ src: "static/etc/idea8.mp3.mpeg" }).obj;
+            const btn1 = new TAG_HTML("div").class(["btn", "btn-primary"]).obj;
+            btn1.setAttribute("play", "false");
+            const icon = new TAG_HTML("i").class(["fa-solid", "fa-play"]).obj;
+            btn1.append(icon);
+            d1.append(btn1);
+            const range = new TAG_HTML("input").props({ type: "range", min: "0", max: "100", value: "0" }).obj;
+            d2.append(range);
+            Object.assign(range.style, {
+                width: "100%",
+            });
+            Object.assign(d2.style, {
+                display: "flex",
+                justifyContent: "center",
+            });
+            box.append(audio, d2, d1);
+            s1.append(box);
+            btn1.addEventListener("click", () => {
+                if (audio.paused) {
+                    audio.play();
+                    icon.classList = "";
+                    icon.classList.add("fa-solid", "fa-stop");
+                }
+                else {
+                    audio.pause();
+                    icon.classList = "";
+                    icon.classList.add("fa-solid", "fa-play");
+                }
+            });
+            audio.addEventListener('timeupdate', () => {
+                range.value = (audio.currentTime / audio.duration) * 100;
+            });
+            range.addEventListener('input', () => {
+                audio.currentTime = (range.value / 100) * audio.duration;
+            });
+        };
+        for (let i = 0; i < 10; i++) {
+            createRow();
+        }
+        Object.assign(this.main.style, {
+            display: "grid",
+            gridTemplateColumns: "50% 50%",
+        });
+        Object.assign(s1.style, {
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px"
+        });
+    }
 }
