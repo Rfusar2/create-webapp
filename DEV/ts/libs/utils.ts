@@ -1,5 +1,4 @@
-
-	class TAG_HTML {
+class TAG_HTML {
     obj: HTMLElement;
         
     constructor(tag: string){
@@ -8,6 +7,7 @@
     id(id: string){this.obj.id = id;return this;}
     class(classes: string[]){this.obj.classList.add(...classes);return this;}
     props(props: object){Object.assign(this.obj, props);return this;}
+    style(styles: object){Object.assign(this.obj.style, styles);return this;}
     attr(attr: object){Object.assign(this.obj.dataset, attr);return this; }
 }
 
@@ -87,18 +87,3 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 //from api
 type Data = object[];
-
-//class EXAMPLE_DATA {
-//    static customer():Data{
-//        const data:ItemCustomer[] = [];
-//        for (let i = 0; i < 500; i++) {
-//            data.push({
-//                id: i + 1,
-//                name:    GENERATE.get(["prov1", "prova2"]),
-//                surname: GENERATE.get(["a", "b"]),
-//                address: GENERATE.get(["c", "d"])
-//            });
-//        }
-//        return {customers: data};
-//    }
-//}

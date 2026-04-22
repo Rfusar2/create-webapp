@@ -1,10 +1,4 @@
 "use strict";
-var ConfigCardStyle;
-(function (ConfigCardStyle) {
-    ConfigCardStyle[ConfigCardStyle["PRIMARY"] = 0] = "PRIMARY";
-    ConfigCardStyle[ConfigCardStyle["ERROR"] = 1] = "ERROR";
-    ConfigCardStyle[ConfigCardStyle["SUCCESS"] = 2] = "SUCCESS";
-})(ConfigCardStyle || (ConfigCardStyle = {}));
 class Card {
     constructor({ parent, title, style, content, note, view, form, router }) {
         this.obj = new TAG_HTML("div").class(["card", "card-details"]).attr({ colorschema: "dark" }).obj;

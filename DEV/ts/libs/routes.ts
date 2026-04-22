@@ -16,6 +16,8 @@ class Routes {
         setInterval(this.db.refresh, this.intervalPolling);
     }
 
+    async home(){ new Home(this) }
+
     async testasyncvalue(){
         this.init("page-home");
         await this.loadDB()
@@ -55,12 +57,31 @@ class Routes {
                 return this.db.tables.example;
             }
         })
+        
+        const table1 = new Table({
+            e: new TAG_HTML("div").class(["table"]).obj,
+            parent: this.main,
+            title: "Data",
+            dimension: "small",
+            style: "paging",
+            tools: {n_rows:true, n_pag:true, settings:true, search:true},
+            ths: [
+                ["id", ""],
+                ["name", "NOME"],
+            ],
+            conn: async ()=>{
+                return this.db.tables.example;
+            }
+        })
 
         setInterval(async ()=>{
             console.log(this.db)
             await this.db.load("example")
             table.table.data = this.db.tables.example
             table.table.setContent(false, {name: "n_pag", value: String(0)});
+            
+            table1.table.data = this.db.tables.example
+            table1.table.setContent(false, {name: "n_pag", value: String(0)});
 
         }, this.intervalPolling);
     }

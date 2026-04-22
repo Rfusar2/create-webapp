@@ -6,11 +6,23 @@ import (
 	"net/http"
 	"os"
 )
+// FOR DATA USING https://json-generator.com/
 
 //============================== TYPES TABLES ==============================
 type ITEM struct {
 	Id   int `json:"id"`
-	Name string `json:"name"`
+	guid string `json:"guid"`
+	active bool `json:"active"`
+	balance float64 `json:"balance"`
+	age int `json:"age"`
+	name string `json:"name"`
+	gender string `json:"gender"`
+	company string `json:"company"`
+	email string `json:"email"`
+	phone string `json:"phone"`
+	address string `json:"address"`
+	about string `json:"about"`
+	registred string `json:"registred"`
 }
 
 //============================== METHODS ==============================

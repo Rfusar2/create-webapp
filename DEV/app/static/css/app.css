@@ -59,12 +59,15 @@ body {
 
 #page-container{
     width:calc(100vw - var(--width-sidebar));
-    overflow-y: auto;
 
 }
 
 #page {
     padding: 20px 20px 0px 20px;
+    height: calc(100vh - 80px);
+    overflow: auto;
+    scrollbar-width: thin;  /* auto | thin | none */
+    scrollbar-color: var(--light-blue) transparent;
 }
 
 /* CONFIG PAGES */

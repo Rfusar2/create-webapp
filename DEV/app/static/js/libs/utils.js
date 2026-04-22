@@ -6,6 +6,7 @@ class TAG_HTML {
     id(id) { this.obj.id = id; return this; }
     class(classes) { this.obj.classList.add(...classes); return this; }
     props(props) { Object.assign(this.obj, props); return this; }
+    style(styles) { Object.assign(this.obj.style, styles); return this; }
     attr(attr) { Object.assign(this.obj.dataset, attr); return this; }
 }
 class SELECT {
@@ -71,17 +72,3 @@ class GENERATE {
     }
 }
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-//class EXAMPLE_DATA {
-//    static customer():Data{
-//        const data:ItemCustomer[] = [];
-//        for (let i = 0; i < 500; i++) {
-//            data.push({
-//                id: i + 1,
-//                name:    GENERATE.get(["prov1", "prova2"]),
-//                surname: GENERATE.get(["a", "b"]),
-//                address: GENERATE.get(["c", "d"])
-//            });
-//        }
-//        return {customers: data};
-//    }
-//}

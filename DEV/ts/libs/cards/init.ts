@@ -1,9 +1,3 @@
-enum ConfigCardStyle {
-    PRIMARY,
-    ERROR,
-    SUCCESS
-}
-
 type ConfigCardForm = {
     conn: (data:object)=>Promise<void>;
     title: string;

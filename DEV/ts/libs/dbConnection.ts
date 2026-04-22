@@ -30,8 +30,3 @@ class MyDB {
 }
 const DATABASE = new MyDB();
 //setInterval(DATABASE.refresh, 10 * 1000)
-
-
-
-
-
