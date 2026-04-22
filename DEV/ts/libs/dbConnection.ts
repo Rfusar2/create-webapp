@@ -9,6 +9,7 @@ class HandlerConnection {
 
         const res = await fetch(endpoint.url);
         tables[id] = res.ok ? await res.json() : await res.text();
+        return tables[id]
     };
 }
 
@@ -18,8 +19,12 @@ class MyDB {
     ready: Promise<void>;
     tables: Record<string, any> = {};
 
-    async load(queryName: string){
-        await this.handler.refresh(queryName, this.tables);
+    async load(url: string, body:object){
+        return await fetch(url, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body),
+        })
     }
 
     async refresh(){

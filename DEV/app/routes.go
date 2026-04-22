@@ -14,5 +14,5 @@ type Percorso struct{
 var percorsi = []Percorso{
     {route: "/",  f: MAIN,},
     
-    {route: "/db/example/get",  f: API_EXAMPLE_FULL,},
+    {route: "/api",  f: API_EXAMPLE_FULL,},
 }

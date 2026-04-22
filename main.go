@@ -13,9 +13,8 @@ var backend string
 func main() {
 	FRONTEND_TS := map[string]string{
 		"aside":  FRONTEND_ASIDE_TS,
-		"cards":  FRONTEND_CARDS_SIMPLE_TS,
+		"cards":  FRONTEND_CARDS_TS,
 		"chart":  FRONTEND_CHART_TS,
-		"details": FRONTEND_DETAILS_TS,
 		"input":  FRONTEND_INPUT_TS,
 		"models": FRONTEND_MODELS_TS,
 		"nav":    FRONTEND_NAV_TS,
@@ -24,9 +23,8 @@ func main() {
 	}
 	FRONTEND_CSS := map[string]string{
 		"aside":  FRONTEND_ASIDE_CSS,
-		"cards":  FRONTEND_CARDS_SIMPLE_CSS,
+		"cards":  FRONTEND_CARDS_CSS,
 		"chart":  FRONTEND_CHART_CSS,
-		"details": FRONTEND_DETAILS_CSS,
 		"input":  FRONTEND_INPUT_CSS,
 		"models": FRONTEND_MODELS_CSS,
 		"nav":    FRONTEND_NAV_CSS,
@@ -34,14 +32,9 @@ func main() {
 		"tables": FRONTEND_TABLES_CSS,
 	}
 	FRONTEND_PAGS_TS := map[string]string{
-		"testAudio":  FRONTEND_PAGS_TESTAUDIO_TS,
-		"userPrompt":  FRONTEND_PAGS_USERPROMPT_TS,
+		"home":  FRONTEND_PAGS_HOME_TS,
+		"init":  FRONTEND_PAGS_TS,
 	}
-
-
-	//"dbConnection": FRONTEND_DBCONNECTION_TS,
-	//"routes": FRONTEND_ROUTES_TS,
-	//"utils": FRONTEND_UTILS_TS,
 
 	re_backend := regexp.MustCompile(`--backend=(local|online)`)
 	re_project := regexp.MustCompile(`--project=([a-zA-Z0-9-_]+)`)
@@ -66,13 +59,11 @@ func main() {
 
 	createFileCSS("home", FRONTEND_HOME_CSS)
 	createFileCSS("app", FRONTEND_APP_CSS)
-	createFileCSS("progetti", FRONTEND_PROGETTI_CSS)
-	createFileCSS("testaudio", FRONTEND_PAGS_TESTAUDIO_CSS)
 
 	createFileTS("dbConnection", FRONTEND_DBCONNECTION_TS)
 	createFileTS("routes", FRONTEND_ROUTES_TS)
 	createFileTS("utils", FRONTEND_UTILS_TS)
-	createFileTS("render", FRONTEND_UTILS_TS)
+	createFileTS("render", FRONTEND_RENDER_TS)
 	
 	createFile("package.json", PACKAGEJSON)
 	createFile("tsconfig.json", TSCONFIG)

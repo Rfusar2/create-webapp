@@ -1,5 +1,5 @@
 "use strict";
-class AudioPage {
+class AudioPage extends Page {
     constructor(parent) {
         this.audio = [
             "static/etc/idea8.mp3.mpeg",
@@ -11,7 +11,7 @@ class AudioPage {
         //audio.append(source);
         //container.append(audio);
         //parent.append(container);
-        const [s1, s2] = ["section", "section"].map((e) => new TAG_HTML(e).obj);
+        const [s1, s2] = this.createSections(2).map((e) => e.obj);
         parent.classList.add("page-audio");
         parent.append(s1, s2);
         const [container, title] = ["div", "h1"].map((e) => new TAG_HTML(e).obj);

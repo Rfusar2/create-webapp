@@ -1,11 +1,6 @@
 "use strict";
 const LINKS_ASIDE = [
     { text: "Home", href: "#", },
-    { text: "Test Async Value", href: "#", },
-    { text: "Test Async Table", href: "#", },
-    { text: "Test Model update ", href: "#", },
-    { text: "Play with input", href: "#", },
-    { text: "Test Audio", href: "#", },
 ];
 class Sidebar {
     constructor() {

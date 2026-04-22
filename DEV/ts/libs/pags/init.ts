@@ -1,4 +1,11 @@
 class Page {
+    router: Routes;
+
+    constructor(router: Routes){
+        this.router = router
+    }
+
+
     createSections(n: number, classes?: string[]){
         const sections = [];
         for(let i=0; i < n; i++){
@@ -16,5 +23,10 @@ class Page {
 
     createSpan(text){
         return new TAG_HTML("span").props({textContent: text})
+    }
+
+    async getDataLoadPage(url, body){
+        let res = await this.router.db.load(url ,body)
+        return res.ok ? await res.json() : await res.text();
     }
 }

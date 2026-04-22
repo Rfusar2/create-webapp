@@ -5,24 +5,30 @@ import (
 	_ "log"
 	"net/http"
 	"os"
+	_ "fmt"
 )
 // FOR DATA USING https://json-generator.com/
 
 //============================== TYPES TABLES ==============================
 type ITEM struct {
 	Id   int `json:"id"`
-	guid string `json:"guid"`
-	active bool `json:"active"`
-	balance float64 `json:"balance"`
-	age int `json:"age"`
-	name string `json:"name"`
-	gender string `json:"gender"`
-	company string `json:"company"`
-	email string `json:"email"`
-	phone string `json:"phone"`
-	address string `json:"address"`
-	about string `json:"about"`
-	registred string `json:"registred"`
+	Guid string `json:"guid"`
+	Active bool `json:"active"`
+	Balance float64 `json:"balance"`
+	Age int `json:"age"`
+	Name string `json:"name"`
+	Gender string `json:"gender"`
+	Company string `json:"company"`
+	Email string `json:"email"`
+	Phone string `json:"phone"`
+	Address string `json:"address"`
+	About string `json:"about"`
+	Registered string `json:"registered"`
+}
+
+type REQ struct {
+	Action string `json:"action"`
+	Record string `json:"record"`
 }
 
 //============================== METHODS ==============================
@@ -49,10 +55,24 @@ func MAIN(w http.ResponseWriter, r *http.Request) {
 
 //============================== GET ==============================
 func API_EXAMPLE_FULL(w http.ResponseWriter, r *http.Request) {
-	data, err := GET_EXAMPLE()
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-	}
+	if r.Method != "POST" { http.Error(w, "NON PUOI FIGLIO DI PUTTANA", 415); return }
+
+	var req REQ
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil { http.Error(w, err.Error(), 415); return }
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(data)
+
+	var data []ITEM
+	if req.Action == "view_example" {
+		data, err = GET_EXAMPLE()
+		if err != nil { http.Error(w, err.Error(), 500); return }
+
+	} else {
+		http.Error(w, "COSA CAZZO FAII?!? action non valido, scemo", 415)
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(data)
+	if err != nil { http.Error(w, err.Error(), 500) }
 }

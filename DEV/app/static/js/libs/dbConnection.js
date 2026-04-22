@@ -11,6 +11,7 @@ class HandlerConnection {
             return;
         const res = await fetch(endpoint.url);
         tables[id] = res.ok ? await res.json() : await res.text();
+        return tables[id];
     }
     ;
 }
@@ -19,8 +20,12 @@ class MyDB {
         this.handler = new HandlerConnection();
         this.tables = {};
     }
-    async load(queryName) {
-        await this.handler.refresh(queryName, this.tables);
+    async load(url, body) {
+        return await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
     }
     async refresh() {
         for (const e of this.handler.GET) {

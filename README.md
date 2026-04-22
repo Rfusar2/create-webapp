@@ -63,8 +63,6 @@ class Routes {
 
 * chart
 
-* details
-
 * input
 
 * models

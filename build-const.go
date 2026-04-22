@@ -22,9 +22,8 @@ func main(){
 	
 	//Typescirpt
 	createVAR("FRONTEND_ASIDE_TS", filepath.Join(WORKDIR_TS_LIBS, "aside", "init.ts"), &content_file)
-	createVAR("FRONTEND_CARDS_SIMPLE_TS", filepath.Join(WORKDIR_TS_LIBS, "cards", "init.ts"), &content_file)
+	createVAR("FRONTEND_CARDS_TS", filepath.Join(WORKDIR_TS_LIBS, "cards", "init.ts"), &content_file)
 	createVAR("FRONTEND_CHART_TS", filepath.Join(WORKDIR_TS_LIBS, "chart", "init.ts"), &content_file)
-	createVAR("FRONTEND_DETAILS_TS", filepath.Join(WORKDIR_TS_LIBS, "details", "init.ts"), &content_file)
 	createVAR("FRONTEND_INPUT_TS", filepath.Join(WORKDIR_TS_LIBS, "input", "init.ts"), &content_file)
 	createVAR("FRONTEND_MODELS_TS", filepath.Join(WORKDIR_TS_LIBS, "models", "init.ts"), &content_file)
 	createVAR("FRONTEND_NAV_TS", filepath.Join(WORKDIR_TS_LIBS, "nav", "init.ts"), &content_file)
@@ -37,14 +36,13 @@ func main(){
 	createVAR("FRONTEND_RENDER_TS", filepath.Join(WORKDIR_TS_LIBS, "render.ts"), &content_file)
 
 	//Typescirpt test pags
-	createVAR("FRONTEND_PAGS_TESTAUDIO_TS", filepath.Join(WORKDIR_PAGS_TS, "testAudio.ts"), &content_file)
-	createVAR("FRONTEND_PAGS_USERPROMPT_TS", filepath.Join(WORKDIR_PAGS_TS, "userPrompt.ts"), &content_file)
+	createVAR("FRONTEND_PAGS_TS", filepath.Join(WORKDIR_PAGS_TS, "init.ts"), &content_file)
+	createVAR("FRONTEND_PAGS_HOME_TS", filepath.Join(WORKDIR_PAGS_TS, "home.ts"), &content_file)
 
 	//CSS
 	createVAR("FRONTEND_ASIDE_CSS", filepath.Join(WORKDIR_CSS_LIBS, "aside", "init.css"), &content_file)
-	createVAR("FRONTEND_CARDS_SIMPLE_CSS", filepath.Join(WORKDIR_CSS_LIBS, "cards", "init.css"), &content_file)
+	createVAR("FRONTEND_CARDS_CSS", filepath.Join(WORKDIR_CSS_LIBS, "cards", "init.css"), &content_file)
 	createVAR("FRONTEND_CHART_CSS", filepath.Join(WORKDIR_CSS_LIBS, "chart", "init.css"), &content_file)
-	createVAR("FRONTEND_DETAILS_CSS", filepath.Join(WORKDIR_CSS_LIBS, "details", "init.css"), &content_file)
 	createVAR("FRONTEND_INPUT_CSS", filepath.Join(WORKDIR_CSS_LIBS, "input", "init.css"), &content_file)
 	createVAR("FRONTEND_MODELS_CSS", filepath.Join(WORKDIR_CSS_LIBS, "models", "init.css"), &content_file)
 	createVAR("FRONTEND_NAV_CSS", filepath.Join(WORKDIR_CSS_LIBS, "nav", "init.css"), &content_file)
@@ -53,8 +51,6 @@ func main(){
 	
 	createVAR("FRONTEND_APP_CSS", filepath.Join(WORKDIR_CSS, "app.css"), &content_file)
 	createVAR("FRONTEND_HOME_CSS", filepath.Join(WORKDIR_CSS, "home.css"), &content_file)
-	createVAR("FRONTEND_PROGETTI_CSS", filepath.Join(WORKDIR_CSS, "progetti.css"), &content_file)
-	createVAR("FRONTEND_PAGS_TESTAUDIO_CSS", filepath.Join(WORKDIR_CSS, "testaudio.css"), &content_file)
 	
 	//BACKEND
 	createVAR("BACKEND_GOLANG_MAIN", filepath.Join(WORKDIR_HOME, "server.go"), &content_file)
