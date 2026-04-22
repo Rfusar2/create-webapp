@@ -16,4 +16,5 @@ class Routes {
         setInterval(this.db.refresh, this.intervalPolling);
     }
     async home() { new Home(this); }
+    async altro() { new Altro(this); }
 }

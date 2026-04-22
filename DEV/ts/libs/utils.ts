@@ -9,6 +9,26 @@ class TAG_HTML {
     props(props: object){Object.assign(this.obj, props);return this;}
     style(styles: object){Object.assign(this.obj.style, styles);return this;}
     attr(attr: object){Object.assign(this.obj.dataset, attr);return this; }
+    event(type:string, func:EventListener){this.obj.addEventListener(type, func); return this;}
+}
+class Section extends TAG_HTML {
+    constructor(){ super("section"); }
+}
+class Container extends TAG_HTML {
+    constructor(){ super("div"); }
+}
+class Span extends TAG_HTML {
+    constructor(){ super("span"); }
+}
+class Title extends TAG_HTML {
+    constructor(){ super("h1"); }
+}
+class Spinner {
+    constructor(color){
+        this.obj = new Container().class(["spinner", color]).obj
+        this.container = new Container().obj
+        this.container.append(this.obj)
+    }
 }
 
 class SELECT {

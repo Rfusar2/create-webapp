@@ -1,6 +1,6 @@
 "use strict";
 class Card {
-    constructor({ parent, title, form }) {
+    constructor({ parent, title }) {
         this.obj = new TAG_HTML("div").class(["card", "card-details"]).attr({ colorschema: "dark" }).obj;
         this.header = new TAG_HTML("header").obj;
         this.main = new TAG_HTML("main").obj;

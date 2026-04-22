@@ -1,6 +1,7 @@
 "use strict";
 const LINKS_ASIDE = [
     { text: "Home", href: "#", },
+    { text: "Altro", href: "#", },
 ];
 class Sidebar {
     constructor() {

@@ -73,6 +73,32 @@ class Routes {
 
 * tables
 
+## UTILS
+
+```javascipt
+class TAG_HTML {
+    obj: HTMLElement;
+        
+    constructor(tag: string){
+        this.obj = document.createElement(tag) as HTMLElement;
+    }
+    id(id: string){this.obj.id = id;return this;}
+    class(classes: string[]){this.obj.classList.add(...classes);return this;}
+    props(props: object){Object.assign(this.obj, props);return this;}
+    style(styles: object){Object.assign(this.obj.style, styles);return this;}
+    attr(attr: object){Object.assign(this.obj.dataset, attr);return this; }
+}
+class Button extends TAG_HTML {
+    constructor(){ super("button"); }
+}
+class Span extends TAG_HTML {
+    constructor(){ super("span"); }
+}
+class Title extends TAG_HTML {
+    constructor(){ super("h1"); }
+}
+```
+
 ## Prossimi Aggiornamenti
 
 * creare ambiente backend flask (per webapp con sessioni, e etc...)

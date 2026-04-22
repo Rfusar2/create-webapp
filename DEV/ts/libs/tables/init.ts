@@ -374,7 +374,7 @@ class ContentTable {
 
 
 class Table {
-    obj: HTMLElement;
+    obj = new TAG_HTML("div").class(["table"]).obj;
     settings = new SettingsTable();
     isDark = true; //da togliere
 
@@ -383,9 +383,8 @@ class Table {
     footer = new FooterTable(0, 0);
 
 
-    constructor({e, parent, title, dimension, style, tools, conn, ths, router}:TableProps){
-        parent.append(e)
-        this.obj = e;
+    constructor({parent, title, dimension, style, tools, conn, ths, router}:TableProps){
+        parent.append(this.obj)
         this.obj.setAttribute("data-colorschema", "dark")
         this.obj.classList.add("table-"+dimension);
         this.settings.tools = tools;

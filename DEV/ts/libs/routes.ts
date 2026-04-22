@@ -17,5 +17,7 @@ class Routes {
     }
 
     async home(){ new Home(this) }
+    
+    async altro(){ new Altro(this) }
 
 }

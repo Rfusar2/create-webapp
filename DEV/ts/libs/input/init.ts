@@ -7,6 +7,7 @@ type ConfigInputChoices = {
     name_column: string;
 }
 type ConfigInputProps = {
+    parent: HTMLElement;
     props?: object;
     tag?: string;
     options?: HTMLOptionElement[];
@@ -66,6 +67,7 @@ class MyInput {
         }
 
         if (classes){ this.input.classList.add(...classes) }
+
         if(event){ this.input.addEventListener(event.type, event.func) }
 
         //*PULIZIA

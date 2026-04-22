@@ -3,10 +3,11 @@ class Page {
     constructor(router) {
         this.router = router;
     }
+    async connect() { }
     createSections(n, classes) {
         const sections = [];
         for (let i = 0; i < n; i++) {
-            const s = new TAG_HTML("section");
+            const s = new Section();
             if (classes)
                 s.class(classes);
             sections.push(s);

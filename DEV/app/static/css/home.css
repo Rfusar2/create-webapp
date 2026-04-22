@@ -7,10 +7,10 @@
     flex:1;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     padding: 10px 0px;
+    gap: 20px;
 }
 
-.page-home .card.flex-full{
+.page-full .card.flex-full{
     flex:1;
 }

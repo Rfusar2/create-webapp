@@ -38,6 +38,7 @@ func main(){
 	//Typescirpt test pags
 	createVAR("FRONTEND_PAGS_TS", filepath.Join(WORKDIR_PAGS_TS, "init.ts"), &content_file)
 	createVAR("FRONTEND_PAGS_HOME_TS", filepath.Join(WORKDIR_PAGS_TS, "home.ts"), &content_file)
+	createVAR("FRONTEND_PAGS_ALTRO_TS", filepath.Join(WORKDIR_PAGS_TS, "altro.ts"), &content_file)
 
 	//CSS
 	createVAR("FRONTEND_ASIDE_CSS", filepath.Join(WORKDIR_CSS_LIBS, "aside", "init.css"), &content_file)

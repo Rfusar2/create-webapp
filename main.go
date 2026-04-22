@@ -34,6 +34,7 @@ func main() {
 	FRONTEND_PAGS_TS := map[string]string{
 		"home":  FRONTEND_PAGS_HOME_TS,
 		"init":  FRONTEND_PAGS_TS,
+		"altro":  FRONTEND_PAGS_ALTRO_TS,
 	}
 
 	re_backend := regexp.MustCompile(`--backend=(local|online)`)
@@ -72,7 +73,7 @@ func main() {
 	log.Println("CREAZIONE AMBIENTE-FRONTEND COMPLETATO")
 
 	createDATABASE()
-	createFile(filepath.Join("app", "database", "customers.json"), `[{"id": 0, "name": "customer1", "surname": "asdasd", "address": "adasd"}]`)
+	createFile(filepath.Join("app", "database", "example.json"), `[{"id": 0, "name": "customer1", "surname": "asdasd", "address": "adasd"}]`)
 
 
 	if backend != "" {

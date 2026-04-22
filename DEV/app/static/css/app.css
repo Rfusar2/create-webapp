@@ -8,22 +8,31 @@
     --bg-body: linear-gradient(to top, #475154, #272f30);
      */
     --bg-body: linear-gradient(to top, #3A4154, #232330);
-
-    --yellow-text: #fcba03;
-
-
-
-    --color-text: #fff;
+    
     --light-blue: #5ED3EC;
     --get-pro: #0FFC03;
+
+    --color-success: #029964;
+    --color-warning: #A29950;
+    --color-error:   #B4483E;
+    --color-primary: #0C8282;
+    --color-extra1:  #FA37FA;
+    --color-extra2:  #DB6204;
+    --color-extra3:  #5ED3EC;
+    --color-extra4:  #0FFC03;
+
+    --color-text: #fff9;
     --error: #FA020F;
-    --width-sidebar: 200px
+
+    --width-sidebar: 200px;
+    --font-size: 15px;
+    --font-weight: 400;
 }
 
 * {
     margin:0;
     padding:0;
-    color: #fff9;
+    color: var(--color-text);
 }
 
 #data-colorschema{
@@ -35,12 +44,11 @@
 body {
     /*
     font-family: 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-
     */
     font-family: "Roboto", sans-serif;
-    font-weight: 500;
+    font-weight: var(--font-weight);
     font-style: normal;
-    font-size: 15px;
+    font-size: var(--font-size);
     overflow:hidden;
 
 }
@@ -58,7 +66,6 @@ body {
 
 #page-container{
     width:calc(100vw - var(--width-sidebar));
-
 }
 
 #page {
@@ -66,7 +73,7 @@ body {
     height: calc(100vh - 80px);
     overflow: auto;
     scrollbar-width: thin;  /* auto | thin | none */
-    scrollbar-color: var(--light-blue) transparent;
+    scrollbar-color: var(--color-extra3) transparent;
 }
 
 /* CONFIG PAGES */
@@ -82,15 +89,23 @@ body {
 /* Buttons */
 .btn {padding: 5px 8px; border-radius: 5px;background:transparent;cursor:pointer;transition:300ms}
 
-.btn-primary {border: 1px solid var(--light-blue); color: var(--light-blue)}
-.btn-error {border: 1px solid var(--error); color: var(--error)}
-.btn-success {border: 1px solid var(--get-pro); color: var(--get-pro)}
-.btn-warning {border: 1px solid var(--yellow-text); color: var(--yellow-text)}
+.btn-primary {border: 1px solid var(--color-primary); color: var(--color-primary)}
+.btn-error {border: 1px solid var(--color-error); color: var(--color-error)}
+.btn-success {border: 1px solid var(--color-success); color: var(--color-success)}
+.btn-warning {border: 1px solid var(--color-warning); color: var(--color-warning)}
+.btn-extra1 {border: 1px solid var(--color-extra1); color: var(--color-extra1)}
+.btn-extra2 {border: 1px solid var(--color-extra2); color: var(--color-extra2)}
+.btn-extra3 {border: 1px solid var(--color-extra3); color: var(--color-extra3)}
+.btn-extra4 {border: 1px solid var(--color-extra4); color: var(--color-extra4)}
 
-.btn-primary:hover {background: var(--light-blue); color: #fff}
-.btn-error:hover {background: var(--error); color: #fff}
-.btn-success:hover {background: var(--get-pro); color: #fff}
-.btn-warning:hover {background: var(--yellow-text); color: #fff}
+.btn-primary:hover {background: var(--color-primary); color: #fff}
+.btn-error:hover {background: var(--color-error); color: #fff}
+.btn-success:hover {background: var(--color-success); color: #fff}
+.btn-warning:hover {background: var(--color-warning); color: #fff}
+.btn-extra1:hover {background: var(--color-extra1); color: #fff}
+.btn-extra2:hover {background: var(--color-extra2); color: #fff}
+.btn-extra3:hover {background: var(--color-extra3); color: #fff}
+.btn-extra4:hover {background: var(--color-extra4); color: #fff}
 
 /* Badges */
 :root{
@@ -132,7 +147,16 @@ span.badge-primary[data-colorschema="light"]{background: var(--dark-bg-primary-b
 span.badge-extra1[data-colorschema="light"]{background: var(--dark-bg-extra1-badge);color: var(--dark-text-extra1-badge);border: 1px solid var(--dark-text-extra1-badge);}
 span.badge-extra2[data-colorschema="light"]{background: var(--dark-bg-extra2-badge);color: var(--dark-text-extra2-badge);border: 1px solid var(--dark-text-extra2-badge);}
 
- /* Spinner */
+/* Spinner */
+.spinner.success {border-top: 5px solid var(--color-success);}
+.spinner.warning {border-top: 5px solid var(--color-warning);}
+.spinner.error {border-top: 5px solid var(--color-error);}
+.spinner.primary {border-top: 5px solid var(--color-primary);}
+.spinner.extra1 {border-top: 5px solid var(--color-extra1);}
+.spinner.extra2 {border-top: 5px solid var(--color-extra2);}
+.spinner.extra3 {border-top: 5px solid var(--color-extra3);}
+.spinner.extra4 {border-top: 5px solid var(--color-extra4);}
+
 .container-spinners {
     display: flex;
     gap: 20px;

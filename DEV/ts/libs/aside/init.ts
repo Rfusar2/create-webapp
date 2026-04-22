@@ -8,6 +8,7 @@ type AsideItem = {
 
 const LINKS_ASIDE: AsideItem[] = [
     {text: "Home", href: "#",},
+    {text: "Altro", href: "#",},
 ] 
 
 

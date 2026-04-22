@@ -289,12 +289,12 @@ class ContentTable {
     }
 }
 class Table {
-    constructor({ e, parent, title, dimension, style, tools, conn, ths, router }) {
+    constructor({ parent, title, dimension, style, tools, conn, ths, router }) {
+        this.obj = new TAG_HTML("div").class(["table"]).obj;
         this.settings = new SettingsTable();
         this.isDark = true; //da togliere
         this.footer = new FooterTable(0, 0);
-        parent.append(e);
-        this.obj = e;
+        parent.append(this.obj);
         this.obj.setAttribute("data-colorschema", "dark");
         this.obj.classList.add("table-" + dimension);
         this.settings.tools = tools;
